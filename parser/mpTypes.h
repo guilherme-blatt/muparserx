@@ -210,8 +210,10 @@ enum EPackages
     pckNON_COMPLEX     = 1 << 3,
     pckSTRING          = 1 << 4,
     pckMATRIX          = 1 << 5,
+    pck_ELEMENT_WISE   = 1 << 6,
     pckALL_COMPLEX     = pckCOMMON | pckCOMPLEX | pckSTRING | pckUNIT | pckMATRIX,
-    pckALL_NON_COMPLEX = pckCOMMON | pckNON_COMPLEX | pckSTRING | pckUNIT | pckMATRIX
+    pckALL_NON_COMPLEX = pckCOMMON | pckNON_COMPLEX | pckSTRING | pckUNIT | pckMATRIX,
+    pckALL_ALL_ELEMENT_WISE = pckCOMMON | pck_ELEMENT_WISE | pckSTRING | pckUNIT | pckMATRIX
 };
 
 //------------------------------------------------------------------------------

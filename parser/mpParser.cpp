@@ -43,6 +43,7 @@
 #include "mpPackageNonCmplx.h"
 #include "mpPackageCommon.h"
 #include "mpPackageMatrix.h"
+#include "mpPackageElementWise.h"
 
 using namespace std;
 
@@ -80,6 +81,9 @@ MUP_NAMESPACE_START
 
     if (ePackages & pckMATRIX)
       AddPackage(PackageMatrix::Instance());
+  
+    if (ePackages & pck_ELEMENT_WISE)
+      AddPackage(PackageElementWise::Instance());
   }
 
   //------------------------------------------------------------------------------
