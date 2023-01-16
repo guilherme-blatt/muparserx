@@ -155,25 +155,61 @@ MUP_NAMESPACE_START
     const IValue *arg2 = a_pArg[1].Get();
     if (arg1->GetType()=='m' && arg2->GetType()=='m')
     {
+     
       // Vector + Vector
       const matrix_type &a1 = arg1->GetArray(),
                        &a2 = arg2->GetArray();
-      if (a1.GetRows()!=a2.GetRows())
-        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
+  
+      //Gets the smallest size
+      int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+  
+      //By default this is not allowed, but we want to support different size operations
+//      if (a1.GetRows()!=a2.GetRows())
+//        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
       
-      matrix_type rv(a1.GetRows());
-      for (int i=0; i<a1.GetRows(); ++i)
+      matrix_type rv(size);
+      for (int i=0; i<size; ++i)
       {
         if (!a1.At(i).IsNonComplexScalar())
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1)); 
 
         if (!a2.At(i).IsNonComplexScalar())
-          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1)); 
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
 
         rv.At(i) = a1.At(i).GetFloat() + a2.At(i).GetFloat();
       }
 
       *ret = rv; 
+    }
+  
+    else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
+      const matrix_type &a1 = arg1->GetArray();
+      
+      matrix_type rv(a1.GetRows());
+      for (int i = 0; i < a1.GetRows(); ++i) {
+        
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+  
+        rv.At(i) = a1.At(i).GetFloat() + arg2->GetFloat();
+      }
+  
+      *ret = rv;
+    }
+    
+    else if(arg1->IsNonComplexScalar() && arg1->GetType()=='m') {
+      const matrix_type &a2 = arg2->GetArray();
+  
+      matrix_type rv(a2.GetRows());
+      for (int i = 0; i < a2.GetRows(); ++i) {
+    
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a2.At(i).GetFloat() + arg1->GetFloat();
+      }
+  
+      *ret = rv;
     }
     else
     {
