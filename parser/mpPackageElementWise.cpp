@@ -31,8 +31,8 @@
 #include "mpPackageElementWise.h"
 
 #include "mpParserBase.h"
-#include "mpFuncNonCmplx.h"
-#include "mpOprtNonCmplx.h"
+#include "mpFuncElementWise.h"
+#include "mpOprtElementWise.h"
 #include "mpOprtBinCommon.h"
 
 
@@ -55,42 +55,42 @@ IPackage* PackageElementWise::Instance()
 //------------------------------------------------------------------------------
 void PackageElementWise::AddToParser(ParserXBase *pParser)
 {
-  pParser->DefineFun(new FunSin());
-  pParser->DefineFun(new FunCos());
-  pParser->DefineFun(new FunTan());
-  pParser->DefineFun(new FunSinH());
-  pParser->DefineFun(new FunCosH());
-  pParser->DefineFun(new FunTanH());
-  pParser->DefineFun(new FunASin());
-  pParser->DefineFun(new FunACos());
-  pParser->DefineFun(new FunATan());
-  pParser->DefineFun(new FunASinH());
-  pParser->DefineFun(new FunACosH());
-  pParser->DefineFun(new FunATanH());
-  pParser->DefineFun(new FunLog());
-  pParser->DefineFun(new FunLog10());
-  pParser->DefineFun(new FunLog2());
-  pParser->DefineFun(new FunLn());
-  pParser->DefineFun(new FunExp());
-  pParser->DefineFun(new FunSqrt());
-  pParser->DefineFun(new FunCbrt());
-  pParser->DefineFun(new FunAbs());
+  pParser->DefineFun(new FunSinElementWise());
+  pParser->DefineFun(new FunCosElementWise());
+  pParser->DefineFun(new FunTanElementWise());
+  pParser->DefineFun(new FunSinHElementWise());
+  pParser->DefineFun(new FunCosHElementWise());
+  pParser->DefineFun(new FunTanHElementWise());
+  pParser->DefineFun(new FunASinElementWise());
+  pParser->DefineFun(new FunACosElementWise());
+  pParser->DefineFun(new FunATanElementWise());
+  pParser->DefineFun(new FunASinHElementWise());
+  pParser->DefineFun(new FunACosHElementWise());
+  pParser->DefineFun(new FunATanHElementWise());
+  pParser->DefineFun(new FunLogElementWise());
+  pParser->DefineFun(new FunLog10ElementWise());
+  pParser->DefineFun(new FunLog2ElementWise());
+  pParser->DefineFun(new FunLnElementWise());
+  pParser->DefineFun(new FunExpElementWise());
+  pParser->DefineFun(new FunSqrtElementWise());
+  pParser->DefineFun(new FunCbrtElementWise());
+  pParser->DefineFun(new FunAbsElementWise());
 
   // binary functions
-  pParser->DefineFun(new FunPow());
-  pParser->DefineFun(new FunHypot());
-  pParser->DefineFun(new FunAtan2());
-  pParser->DefineFun(new FunFmod());
-  pParser->DefineFun(new FunRemainder());
+  pParser->DefineFun(new FunPowElementWise());
+  pParser->DefineFun(new FunHypotElementWise());
+  pParser->DefineFun(new FunAtan2ElementWise());
+  pParser->DefineFun(new FunFmodElementWise());
+  pParser->DefineFun(new FunRemainderElementWise());
 
   // Operator callbacks
-  pParser->DefineInfixOprt(new OprtSign());
-  pParser->DefineInfixOprt(new OprtSignPos());
-  pParser->DefineOprt(new OprtAdd());
-  pParser->DefineOprt(new OprtSub());
-  pParser->DefineOprt(new OprtMul());
-  pParser->DefineOprt(new OprtDiv());
-  pParser->DefineOprt(new OprtPow);
+  pParser->DefineInfixOprt(new OprtSignElementWise());
+  pParser->DefineInfixOprt(new OprtSignPosElementWise());
+  pParser->DefineOprt(new OprtAddElementWise());
+  pParser->DefineOprt(new OprtSubElementWise());
+  pParser->DefineOprt(new OprtMulElementWise());
+  pParser->DefineOprt(new OprtDivElementWise());
+  pParser->DefineOprt(new OprtPowElementWise());
 }
 
 //------------------------------------------------------------------------------

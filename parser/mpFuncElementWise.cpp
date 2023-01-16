@@ -48,7 +48,7 @@
 
 MUP_NAMESPACE_START
 
-#define MUP_UNARY_FUNC_ELEMENT_WISE_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                     \
+#define MUP_UNARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                     \
     CLASS::CLASS()                                                   \
     :ICallback(cmFUNC, _T(IDENT), 1)                                 \
     {}                                                               \
@@ -69,31 +69,31 @@ MUP_NAMESPACE_START
     }
 
     // trigonometric functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunTan,   "sin",   std::sin,   "sine function")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunCos,   "cos",   std::cos,   "cosine function")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunSin,   "tan",   std::tan,   "tangens function")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunTanElementWise,   "sin",   std::sin,   "sine function")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunCosElementWise,   "cos",   std::cos,   "cosine function")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunSinElementWise,   "tan",   std::tan,   "tangens function")
     // arcus functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunASin,  "asin",  std::asin,  "arcus sine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunACos,  "acos",  std::acos,  "arcus cosine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunATan,  "atan",  std::atan,  "arcus tangens")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunASinElementWise,  "asin",  std::asin,  "arcus sine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunACosElementWise,  "acos",  std::acos,  "arcus cosine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunATanElementWise,  "atan",  std::atan,  "arcus tangens")
     // hyperbolic functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunSinH,  "sinh",  std::sinh,  "hyperbolic sine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunCosH,  "cosh",  std::cosh,  "hyperbolic cosine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunTanH,  "tanh",  std::tanh,  "hyperbolic tangens")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunSinHElementWise,  "sinh",  std::sinh,  "hyperbolic sine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunCosHElementWise,  "cosh",  std::cosh,  "hyperbolic cosine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunTanHElementWise,  "tanh",  std::tanh,  "hyperbolic tangens")
     // hyperbolic arcus functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunASinH, "asinh", std::asinh, "hyperbolic arcus sine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunACosH, "acosh", std::acosh, "hyperbolic arcus cosine")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunATanH, "atanh", std::atanh, "hyperbolic arcus tangens")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunASinHElementWise, "asinh", std::asinh, "hyperbolic arcus sine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunACosHElementWise, "acosh", std::acosh, "hyperbolic arcus cosine")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunATanHElementWise, "atanh", std::atanh, "hyperbolic arcus tangens")
     // logarithm functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog,   "log",   std::log,   "Natural logarithm")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog10, "log10", std::log10, "Logarithm base 10")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog2,  "log2",  std::log2,  "Logarithm base 2")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLn,    "ln",    std::log,   "Natural logarithm")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunLogElementWise,   "log",   std::log,   "Natural logarithm")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog10ElementWise, "log10", std::log10, "Logarithm base 10")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog2ElementWise,  "log2",  std::log2,  "Logarithm base 2")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunLnElementWise,    "ln",    std::log,   "Natural logarithm")
     // square root
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunSqrt,  "sqrt",  std::sqrt,  "sqrt(x) - square root of x")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunCbrt,  "cbrt",  std::cbrt,  "cbrt(x) - cubic root of x")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunExp,   "exp",   std::exp,   "exp(x) - e to the power of x")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunAbs,   "abs",   std::fabs,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunSqrtElementWise,  "sqrt",  std::sqrt,  "sqrt(x) - square root of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunCbrtElementWise,  "cbrt",  std::cbrt,  "cbrt(x) - cubic root of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunExpElementWise,   "exp",   std::exp,   "exp(x) - e to the power of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunAbsElementWise,   "abs",   std::fabs,  "abs(x) - absolute value of x")
 #undef MUP_UNARY_FUNC_ELEMENT_WISE
 
 #define MUP_BINARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC) \
@@ -116,11 +116,11 @@ MUP_NAMESPACE_START
       return new CLASS(*this);                                       \
     }
 
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunPow,  "pow",  std::pow,  "pow(x, y) - raise x to the power of y")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunHypot,  "hypot",  std::hypot,  "hypot(x, y) - compute the length of the vector x,y")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunAtan2, "atan2", std::atan2, "arcus tangens with quadrant fix")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunFmod,  "fmod",  std::fmod,  "fmod(x, y) - floating point remainder of x / y")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunRemainder,  "remainder",  std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunPowElementWise,  "pow",  std::pow,  "pow(x, y) - raise x to the power of y")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunHypotElementWise,  "hypot",  std::hypot,  "hypot(x, y) - compute the length of the vector x,y")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunAtan2ElementWise, "atan2", std::atan2, "arcus tangens with quadrant fix")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunFmodElementWise,  "fmod",  std::fmod,  "fmod(x, y) - floating point remainder of x / y")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunRemainderElementWise,  "remainder",  std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
 #undef MUP_BINARY_FUNC_ELEMENT_WISE
 
 MUP_NAMESPACE_END
