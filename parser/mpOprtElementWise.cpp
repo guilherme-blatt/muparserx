@@ -561,11 +561,11 @@ MUP_NAMESPACE_START
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
   
         int ib = a2.At(i).GetInteger();
-        if (a2.At(i).GetInteger() - ib == 0) {
-          *ret = std::pow(a1.At(i).GetInteger(), ib);
+        if (a2.At(i).GetFloat() - ib == 0) {
+          *ret = std::pow(a1.At(i).GetFloat(), ib);
         }
         else
-          *ret = std::pow(a1.At(i).GetInteger(), a2.At(i).GetInteger());
+          *ret = std::pow(a1.At(i).GetFloat(), a2.At(i).GetFloat());
       }
     }
     else if (arg1->GetType() == 'm' && arg2->IsNonComplexScalar()){
@@ -578,11 +578,11 @@ MUP_NAMESPACE_START
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
           
         int ib = arg2->GetInteger();
-        if (a1.At(i).GetInteger() - ib == 0) {
-          *ret = std::pow(a1.At(i).GetInteger(), ib);
+        if (a1.At(i).GetFloat() - ib == 0) {
+          *ret = std::pow(a1.At(i).GetFloat(), ib);
         }
         else
-          *ret = std::pow(a1.At(i).GetInteger(), arg2->GetInteger());
+          *ret = std::pow(a1.At(i).GetFloat(), arg2->GetFloat());
       }
     }
     else if (arg2->GetType() == 'm' && arg1->IsNonComplexScalar()){
@@ -592,14 +592,14 @@ MUP_NAMESPACE_START
       matrix_type rv(a2.GetRows());
       for (int i=0; i<a2.GetRows(); i++) {
         if (!a2.At(i).IsNonComplexScalar())
-          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
     
         int ib = arg2->GetInteger();
-        if (a2.At(i).GetInteger() - ib == 0) {
-          *ret = std::pow(a2.At(i).GetInteger(), ib);
+        if (a2.At(i).GetFloat() - ib == 0) {
+          *ret = std::pow(a2.At(i).GetFloat(), ib);
         }
         else
-          *ret = std::pow(arg1->GetInteger(), a2.At(i).GetInteger());
+          *ret = std::pow(arg1->GetFloat(), a2.At(i).GetFloat());
       }
     }
     else{
@@ -610,11 +610,11 @@ MUP_NAMESPACE_START
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
   
       int ib = arg2->GetInteger();
-      if (arg1->GetInteger() - ib == 0) {
-        *ret = std::pow(arg1->GetInteger(), ib);
+      if (arg1->GetFloat() - ib == 0) {
+        *ret = std::pow(arg1->GetFloat(), ib);
       }
       else
-        *ret = std::pow(arg1->GetInteger(), arg2->GetInteger());
+        *ret = std::pow(arg1->GetFloat(), arg2->GetFloat());
     }
   }
   //-----------------------------------------------------------
