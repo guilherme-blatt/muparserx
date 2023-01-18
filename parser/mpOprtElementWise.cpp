@@ -197,7 +197,7 @@ MUP_NAMESPACE_START
       *ret = rv;
     }
     
-    else if(arg1->IsNonComplexScalar() && arg1->GetType()=='m') {
+    else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
       const matrix_type &a2 = arg2->GetArray();
   
       matrix_type rv(a2.GetRows());
@@ -250,37 +250,66 @@ MUP_NAMESPACE_START
   { 
     assert(num==2);
 
-    if (a_pArg[0]->GetType()=='m' && a_pArg[1]->GetType()=='m')
+    const IValue *arg1 = a_pArg[0].Get();
+    const IValue *arg2 = a_pArg[1].Get();
+
+    if (arg1->GetType()=='m' && arg2->GetType()=='m')
     {
       const matrix_type &a1 = a_pArg[0]->GetArray(),
                        &a2 = a_pArg[1]->GetArray();
-      if (a1.GetRows()!=a2.GetRows())
-        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
-      
-      matrix_type rv(a1.GetRows());
-      for (int i=0; i<a1.GetRows(); ++i)
-      {
+  
+      int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+  
+      matrix_type rv(size);
+      for (int i=0; i<size; ++i) {
         if (!a1.At(i).IsNonComplexScalar())
-          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1)); 
-
+          throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+  
         if (!a2.At(i).IsNonComplexScalar())
-          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1)); 
-
-        rv.At(i) = cmplx_type(a1.At(i).GetFloat() - a2.At(i).GetFloat(),
-                              a1.At(i).GetImag()  - a2.At(i).GetImag());
+          throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+  
+        rv.At(i) = a1.At(i).GetFloat() - a2.At(i).GetFloat();
       }
-
+      
+      *ret = rv;
+    }
+    else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
+      const matrix_type &a1 = arg1->GetArray();
+  
+      matrix_type rv(a1.GetRows());
+      for (int i = 0; i < a1.GetRows(); ++i) {
+    
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a1.At(i).GetFloat() - arg2->GetFloat();
+      }
+  
+      *ret = rv;
+    }
+    else if(arg1->IsNonComplexScalar() && arg1->GetType()=='m') {
+      const matrix_type &a2 = arg2->GetArray();
+  
+      matrix_type rv(a2.GetRows());
+      for (int i = 0; i < a2.GetRows(); ++i) {
+    
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a2.At(i).GetFloat() - arg1->GetFloat();
+      }
+  
       *ret = rv;
     }
     else
     {
-      if (!a_pArg[0]->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[0]->GetType(), 'f', 1)); 
-
-      if (!a_pArg[1]->IsNonComplexScalar())
-        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[1]->GetType(), 'f', 2)); 
-      
-      *ret = a_pArg[0]->GetFloat() - a_pArg[1]->GetFloat(); 
+      if (!arg1->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
+  
+      if (!arg2->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
+  
+      *ret = arg1->GetFloat() - arg2->GetFloat();
     }
   }
 
@@ -310,40 +339,62 @@ MUP_NAMESPACE_START
   void OprtMulElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
   { 
     assert(num==2);
+    
     IValue *arg1 = a_pArg[0].Get();
     IValue *arg2 = a_pArg[1].Get();
     if (arg1->GetType()=='m' && arg2->GetType()=='m')
     {
       // Scalar multiplication
-      matrix_type a1 = arg1->GetArray();
-      matrix_type a2 = arg2->GetArray();
-
-      if (a1.GetRows()!=a2.GetRows())
-        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
-
-      float_type val(0);
-      for (int i=0; i<a1.GetRows(); ++i)
-        val += a1.At(i).GetFloat()*a2.At(i).GetFloat();
-
-      *ret = val;
+      const matrix_type &a1 = arg1->GetArray(),
+                        &a2 = arg2->GetArray();
+  
+      int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+  
+      matrix_type rv(size);
+      for (int i=0; i<size; ++i)
+      {
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+    
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a1.At(i).GetFloat() * a2.At(i).GetFloat();
+      }
+      
+      *ret = rv;
     }
     else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar())
     {
-      // Skalar * Vector
-      matrix_type out(a_pArg[0]->GetArray());
-      for (int i=0; i<out.GetRows(); ++i)
-        out.At(i) = out.At(i).GetFloat() * arg2->GetFloat();
-
-      *ret = out; 
+      // Vector * Escalar
+      const matrix_type &a1 = arg1->GetArray();
+  
+      matrix_type rv(a1.GetRows());
+      for (int i = 0; i < a1.GetRows(); ++i) {
+    
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a1.At(i).GetFloat() * arg2->GetFloat();
+      }
+  
+      *ret = rv;
     }
     else if (arg2->GetType()=='m' && arg1->IsNonComplexScalar())
     {
-      // Vector * Skalar
-      matrix_type out(arg2->GetArray());
-      for (int i=0; i<out.GetRows(); ++i)
-        out.At(i) = out.At(i).GetFloat() * arg1->GetFloat();
-
-      *ret = out; 
+      // Skalar * Vector
+      const matrix_type &a2 = arg2->GetArray();
+  
+      matrix_type rv(a2.GetRows());
+      for (int i = 0; i < a2.GetRows(); ++i) {
+    
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+    
+        rv.At(i) = a2.At(i).GetFloat() * arg1->GetFloat();
+      }
+  
+      *ret = rv;
     }
     else
     {
@@ -389,14 +440,80 @@ MUP_NAMESPACE_START
   void OprtDivElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
   { 
     assert(num==2);
+    IValue *arg1 = a_pArg[0].Get();
+    IValue *arg2 = a_pArg[1].Get();
 
-    if (!a_pArg[0]->IsNonComplexScalar())
-      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[0]->GetType(), 'f', 1)); 
+    if (arg1->GetType()=='m' && arg2->GetType()=='m')
+    {
+      // Vector / Vector
+      const matrix_type &a1 = arg1->GetArray(),
+                        &a2 = arg2->GetArray();
+  
+      int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+  
+      matrix_type rv(size);
+      for (int i=0; i<size; ++i) {
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+  
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+  
+        if (a2.At(i).GetFloat() == (float) 0)
+          rv.At(i) = NAN;
+        
+        else
+          rv.At(i) = a1.At(i).GetFloat() / a2.At(i).GetFloat();
+      }
+      
+      *ret = rv;
+    }
+    else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar())
+    {
+      // Vector / Skalar
+      const matrix_type &a1 = arg1->GetArray();
+      matrix_type rv(a1.GetRows());
+      
+      if (arg2->GetFloat() != (float) 0) {
+        for (int i = 0; i < a1.GetRows(); ++i) {
+          rv.At(i) = a1.At(i).GetFloat() / arg2->GetFloat();
+        }
+      }
+      else {
+        for (int i = 0; i < a1.GetRows(); ++i) {
+          rv.At(i) = NAN;
+        }
+      }
+      *ret = rv;
+    }
+    else if (arg2->GetType()=='m' && arg1->IsNonComplexScalar())
+    {
+      // Skalar / Vector
+      const matrix_type &a2 = arg1->GetArray();
+      matrix_type rv(a2.GetRows());
+      
+      if (arg1->GetFloat() != (float) 0) {
+        for (int i = 0; i < a2.GetRows(); ++i) {
+          rv.At(i) = arg1->GetFloat() / a2.At(i).GetFloat();
+        }
+      }
+      else {
+        for (int i = 0; i < a2.GetRows(); ++i) {
+          rv.At(i) = NAN;
+        }
+      }
+      *ret = rv;
+    }
+    else
+    {
+      if (!a_pArg[0]->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[0]->GetType(), 'f', 1));
 
-    if (!a_pArg[1]->IsNonComplexScalar())
-      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[1]->GetType(), 'f', 2)); 
-    
-    *ret = a_pArg[0]->GetFloat() / a_pArg[1]->GetFloat();
+      if (!a_pArg[1]->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[1]->GetType(), 'f', 2));
+
+      *ret = a_pArg[0]->GetFloat() / a_pArg[1]->GetFloat();
+    }
   }
 
   //-----------------------------------------------------------
@@ -422,29 +539,84 @@ MUP_NAMESPACE_START
   {}
                                                                         
   //-----------------------------------------------------------
-  void OprtPowElementWise::Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc)
+  void OprtPowElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   {
-    assert(argc==2);
-    float_type a = arg[0]->GetFloat();
-    float_type b = arg[1]->GetFloat();
-    
-    int ib = (int)b;
-    if (b-ib==0)
-    {
-      switch (ib)
-      {
-      case 1:  *ret = a; return;
-      case 2:  *ret = a*a; return;
-      case 3:  *ret = a*a*a; return;
-      case 4:  *ret = a*a*a*a; return;
-      case 5:  *ret = a*a*a*a*a; return;
-      default: *ret = std::pow(a, ib); return;
+    assert(num == 2);
+    const IValue* arg1 = a_pArg[0].Get();
+    const IValue* arg2 = a_pArg[1].Get();
+  
+    if (arg1->GetType() == 'm' && arg2->GetType() == 'm') {
+      // Vector + Vector
+      const matrix_type &a1 = arg1->GetArray(),
+                        &a2 = arg2->GetArray();
+  
+      int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+      
+      matrix_type rv(size);
+      for (int i=0; i<size; i++) {
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+  
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+  
+        int ib = a2.At(i).GetInteger();
+        if (a2.At(i).GetInteger() - ib == 0) {
+          *ret = std::pow(a1.At(i).GetInteger(), ib);
+        }
+        else
+          *ret = std::pow(a1.At(i).GetInteger(), a2.At(i).GetInteger());
       }
     }
-    else
-      *ret = std::pow(a, b);
+    else if (arg1->GetType() == 'm' && arg2->IsNonComplexScalar()){
+      // Vector ^ Skalar
+      const matrix_type &a1 = arg1->GetArray();
+      
+      matrix_type rv(a1.GetRows());
+      for (int i=0; i<a1.GetRows(); i++) {
+        if (!a1.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+          
+        int ib = arg2->GetInteger();
+        if (a1.At(i).GetInteger() - ib == 0) {
+          *ret = std::pow(a1.At(i).GetInteger(), ib);
+        }
+        else
+          *ret = std::pow(a1.At(i).GetInteger(), arg2->GetInteger());
+      }
+    }
+    else if (arg2->GetType() == 'm' && arg1->IsNonComplexScalar()){
+      // Skalar ^ Vector
+      const matrix_type &a2 = arg2->GetArray();
+  
+      matrix_type rv(a2.GetRows());
+      for (int i=0; i<a2.GetRows(); i++) {
+        if (!a2.At(i).IsNonComplexScalar())
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+    
+        int ib = arg2->GetInteger();
+        if (a2.At(i).GetInteger() - ib == 0) {
+          *ret = std::pow(a2.At(i).GetInteger(), ib);
+        }
+        else
+          *ret = std::pow(arg1->GetInteger(), a2.At(i).GetInteger());
+      }
+    }
+    else{
+      if (!arg1->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
+  
+      if (!arg2->IsNonComplexScalar())
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
+  
+      int ib = arg2->GetInteger();
+      if (arg1->GetInteger() - ib == 0) {
+        *ret = std::pow(arg1->GetInteger(), ib);
+      }
+      else
+        *ret = std::pow(arg1->GetInteger(), arg2->GetInteger());
+    }
   }
-
   //-----------------------------------------------------------
   const char_type* OprtPowElementWise::GetDesc() const
   { 
