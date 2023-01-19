@@ -170,13 +170,13 @@ MUP_NAMESPACE_START
 //      if (a1.GetRows()!=a2.GetRows())
 //        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
       
-      matrix_type rv(size);
-      for (int i=0; i<size; ++i)
+      matrix_type rv(size);//this variable receive the result of operation
+      for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
       {
-        if (!a1.At(i).IsNonComplexScalar())
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1)); 
 
-        if (!a2.At(i).IsNonComplexScalar())
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
 
         rv.At(i) = a1.At(i).GetFloat() + a2.At(i).GetFloat();
@@ -189,10 +189,10 @@ MUP_NAMESPACE_START
       // Vector + Scalar
       const matrix_type &a1 = arg1->GetArray();
       
-      matrix_type rv(a1.GetRows());
-      for (int i = 0; i < a1.GetRows(); ++i) {
+      matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+      for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
         
-        if (!a1.At(i).IsNonComplexScalar())
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
   
         rv.At(i) = a1.At(i).GetFloat() + arg2->GetFloat();
@@ -205,10 +205,11 @@ MUP_NAMESPACE_START
       //Scalar + Vector
       const matrix_type &a2 = arg2->GetArray();
   
-      matrix_type rv(a2.GetRows());
-      for (int i = 0; i < a2.GetRows(); ++i) {
+      matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+  
+      for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
     
-        if (!a2.At(i).IsNonComplexScalar())
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
     
         rv.At(i) = a2.At(i).GetFloat() + arg1->GetFloat();
@@ -217,11 +218,11 @@ MUP_NAMESPACE_START
       *ret = rv;
     }
     else
-    {
-      if (!arg1->IsNonComplexScalar())
+    {//Scalar + Scalar
+      if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
 
-      if (!arg2->IsNonComplexScalar())
+      if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2)); 
       
       *ret = arg1->GetFloat() + arg2->GetFloat(); 
@@ -272,12 +273,12 @@ MUP_NAMESPACE_START
       //Gets the smallest size
       int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
   
-      matrix_type rv(size);
-      for (int i=0; i<size; ++i) {
-        if (!a1.At(i).IsNonComplexScalar())
+      matrix_type rv(size);//this variable receive the result of operation
+      for (int i=0; i<size; ++i) {// do the operation between arg1 and agr2 for each element of the smallest array
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
   
-        if (!a2.At(i).IsNonComplexScalar())
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
   
         rv.At(i) = a1.At(i).GetFloat() - a2.At(i).GetFloat();
@@ -289,10 +290,10 @@ MUP_NAMESPACE_START
       // Vector - Scalar
       const matrix_type &a1 = arg1->GetArray();
   
-      matrix_type rv(a1.GetRows());
-      for (int i = 0; i < a1.GetRows(); ++i) {
+      matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+      for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
     
-        if (!a1.At(i).IsNonComplexScalar())
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
     
         rv.At(i) = a1.At(i).GetFloat() - arg2->GetFloat();
@@ -304,10 +305,10 @@ MUP_NAMESPACE_START
       //Scalar - Vector
       const matrix_type &a2 = arg2->GetArray();
   
-      matrix_type rv(a2.GetRows());
-      for (int i = 0; i < a2.GetRows(); ++i) {
+      matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+      for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
     
-        if (!a2.At(i).IsNonComplexScalar())
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
     
         rv.At(i) = a2.At(i).GetFloat() - arg1->GetFloat();
@@ -318,10 +319,10 @@ MUP_NAMESPACE_START
     else
     {
       //Scalar - Scalar
-      if (!arg1->IsNonComplexScalar())
+      if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
   
-      if (!arg2->IsNonComplexScalar())
+      if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
   
       *ret = arg1->GetFloat() - arg2->GetFloat();
@@ -390,8 +391,8 @@ MUP_NAMESPACE_START
       // Vector * Scalar
       const matrix_type &a1 = arg1->GetArray();
   
-      matrix_type rv(a1.GetRows());
-      for (int i = 0; i < a1.GetRows(); ++i) {
+      matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+      for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
     
         if (!a1.At(i).IsNonComplexScalar())
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
@@ -406,8 +407,8 @@ MUP_NAMESPACE_START
       // Scalar * Vector
       const matrix_type &a2 = arg2->GetArray();
   
-      matrix_type rv(a2.GetRows());
-      for (int i = 0; i < a2.GetRows(); ++i) {
+      matrix_type rv(a2.GetRows()); //this variable receive the result of operation, your size is equal to arg2 size
+      for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
     
         if (!a2.At(i).IsNonComplexScalar())
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
@@ -420,10 +421,10 @@ MUP_NAMESPACE_START
     else
     {
       //Scalar * Scalar
-      if (!arg1->IsNonComplexScalar())
+      if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1)); 
 
-      if (!arg2->IsNonComplexScalar())
+      if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2)); 
 
       *ret = arg1->GetFloat() * arg2->GetFloat(); 
@@ -495,14 +496,15 @@ MUP_NAMESPACE_START
     {
       // Vector / Scalar
       const matrix_type &a1 = arg1->GetArray();
-      matrix_type rv(a1.GetRows());
+      matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
       
       if (arg2->GetFloat() != (float) 0) {
         for (int i = 0; i < a1.GetRows(); ++i) {
+          // do the operation between arg1 and agr2 for each element of the arg1 (vector) if arg2 (scalar) != 0
           rv.At(i) = a1.At(i).GetFloat() / arg2->GetFloat();
         }
       }
-      else {
+      else { //when arg2 == 0, this operation for each element of arg1 is not-a-number
         for (int i = 0; i < a1.GetRows(); ++i) {
           rv.At(i) = NAN;
         }
@@ -512,30 +514,34 @@ MUP_NAMESPACE_START
     else if (arg2->GetType()=='m' && arg1->IsNonComplexScalar())
     {
       // Scalar / Vector
-      const matrix_type &a2 = arg1->GetArray();
-      matrix_type rv(a2.GetRows());
+      const matrix_type &a2 = arg2->GetArray();
+      matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
       
-      if (arg1->GetFloat() != (float) 0) {
-        for (int i = 0; i < a2.GetRows(); ++i) {
+      
+      for (int i = 0; i < a2.GetRows(); ++i) {
+        // do the operation between arg1 and agr2 for each element of the arg2 (vector) if != 0
+        if (a2.At(i).GetFloat() != (float) 0) {
           rv.At(i) = arg1->GetFloat() / a2.At(i).GetFloat();
         }
-      }
-      else {
-        for (int i = 0; i < a2.GetRows(); ++i) {
+        else {
+          //when an element of arg2 == 0, this operation for them is not-a-number
           rv.At(i) = NAN;
         }
       }
       *ret = rv;
     }
     else
-    {
-      if (!a_pArg[0]->IsNonComplexScalar())
+    {// If arg[0] and arg[1] is a non-complex scalar and arg[1] is != 0 returns arg[0]/arg[1], otherwise returns not-a-number
+      if (!a_pArg[0]->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[0]->GetType(), 'f', 1));
 
-      if (!a_pArg[1]->IsNonComplexScalar())
+      if (!a_pArg[1]->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a_pArg[1]->GetType(), 'f', 2));
 
-      *ret = a_pArg[0]->GetFloat() / a_pArg[1]->GetFloat();
+      if (a_pArg[1]->GetFloat() != 0)
+        *ret = a_pArg[0]->GetFloat() / a_pArg[1]->GetFloat();
+      else
+        *ret = NAN;
     }
   }
 
@@ -576,14 +582,15 @@ MUP_NAMESPACE_START
       const matrix_type &a1 = arg1->GetArray(),
                         &a2 = arg2->GetArray();
   
+      //Gets the smallest size
       int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
       
-      matrix_type rv(size);
-      for (int i=0; i<size; i++) {
-        if (!a1.At(i).IsNonComplexScalar())
+      matrix_type rv(size); //this variable receive the result of operation
+      for (int i=0; i<size; i++) { // do the operation between arg1 and agr2 for each element of the smallest array
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
   
-        if (!a2.At(i).IsNonComplexScalar())
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
   
 //        int ib = a2.At(i).GetInteger();
@@ -595,12 +602,12 @@ MUP_NAMESPACE_START
       }
     }
     else if (arg1->GetType() == 'm' && arg2->IsNonComplexScalar()){
-      // Vector ^ Skalar
+      // Vector ^ Scalar
       const matrix_type &a1 = arg1->GetArray();
       
-      matrix_type rv(a1.GetRows());
-      for (int i=0; i<a1.GetRows(); i++) {
-        if (!a1.At(i).IsNonComplexScalar())
+      matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+      for (int i=0; i<a1.GetRows(); i++) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
+        if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
           
         //int ib = arg2->GetInteger();
@@ -612,12 +619,12 @@ MUP_NAMESPACE_START
       }
     }
     else if (arg2->GetType() == 'm' && arg1->IsNonComplexScalar()){
-      // Skalar ^ Vector
+      // Scalar ^ Vector
       const matrix_type &a2 = arg2->GetArray();
   
-      matrix_type rv(a2.GetRows());
-      for (int i=0; i<a2.GetRows(); i++) {
-        if (!a2.At(i).IsNonComplexScalar())
+      matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+      for (int i=0; i<a2.GetRows(); i++) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
+        if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
     
         //int ib = arg2->GetInteger();
@@ -629,10 +636,10 @@ MUP_NAMESPACE_START
       }
     }
     else{
-      if (!arg1->IsNonComplexScalar())
+      if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
   
-      if (!arg2->IsNonComplexScalar())
+      if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
   
       //int ib = arg2->GetInteger();

@@ -86,7 +86,7 @@ void OprtEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // Vector == Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -113,7 +113,7 @@ void OprtEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
-    // Vector + Scalar
+    // Vector == Scalar
     const matrix_type &a1 = arg1->GetArray();
     
     matrix_type rv(a1.GetRows());
@@ -129,7 +129,7 @@ void OprtEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //Scalar == Vector
     const matrix_type &a2 = arg2->GetArray();
     
     matrix_type rv(a2.GetRows());
@@ -186,7 +186,7 @@ void OprtNEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // If arg1 is a Vector != arg2 is a Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -194,64 +194,64 @@ void OprtNEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
     int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
     
     //By default this is not allowed, but we want to support different size operations
-//      if (a1.GetRows()!=a2.GetRows())
+//      if (a1.GetRows()!= a2.GetRows())
 //        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
-    
-    matrix_type rv(size);
-    for (int i=0; i<size; ++i)
+
+    matrix_type rv(size); //this variable receive the result of operation
+    for (int i=0; i<size; ++i) // do the operation between arg1 and agr2 for each element of the smallest array
     {
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar()) // if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() != a2.At(i).GetFloat();
     }
     
-    *ret = rv;
+    *ret = rv; //that's the return of the function
   }
   
   else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
-    // Vector + Scalar
+    // If arg1 is a Vector != If arg2 is a Scalar
     const matrix_type &a1 = arg1->GetArray();
     
-    matrix_type rv(a1.GetRows());
-    for (int i = 0; i < a1.GetRows(); ++i) {
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) { // do the operation between arg1 and agr2 for each element of the arg1 (vector)
       
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() != arg2->GetFloat();
     }
     
-    *ret = rv;
+    *ret = rv;//that's the return of the function
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //If arg1 is a Scalar + If arg2 is a Vector
     const matrix_type &a2 = arg2->GetArray();
     
-    matrix_type rv(a2.GetRows());
-    for (int i = 0; i < a2.GetRows(); ++i) {
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) { // do the operation between arg1 and agr2 for each element of the arg2(vector)
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a2.At(i).GetFloat() != arg1->GetFloat();
     }
     
-    *ret = rv;
+    *ret = rv;//that's the return of the function
   }
   else
-  {
-    if (!arg1->IsNonComplexScalar())
+  {//If arg1 is a Scalar != If arg2 is a Scalar
+    if (!arg1->IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
     
-    if (!arg2->IsNonComplexScalar())
+    if (!arg2->IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
     
-    *ret = arg1->GetFloat() != arg2->GetFloat();
+    *ret = arg1->GetFloat() != arg2->GetFloat();//that's the return of the function
   }
 }
 
@@ -286,7 +286,7 @@ void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // If arg1 is a Vector < If arg2 is a Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -297,29 +297,29 @@ void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 //      if (a1.GetRows()!=a2.GetRows())
 //        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
     
-    matrix_type rv(size);
-    for (int i=0; i<size; ++i)
+    matrix_type rv(size);//this variable receive the result of operation
+    for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
     {
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() < a2.At(i).GetFloat();
     }
     
-    *ret = rv;
+    *ret = rv;//that's the return of the function
   }
   
   else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
-    // Vector + Scalar
+    // If arg1 is a Vector < If arg2 is a Scalar
     const matrix_type &a1 = arg1->GetArray();
     
-    matrix_type rv(a1.GetRows());
-    for (int i = 0; i < a1.GetRows(); ++i) {
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
       
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() < arg2->GetFloat();
@@ -329,13 +329,13 @@ void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //Scalar < Vector
     const matrix_type &a2 = arg2->GetArray();
     
-    matrix_type rv(a2.GetRows());
-    for (int i = 0; i < a2.GetRows(); ++i) {
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a2.At(i).GetFloat() < arg1->GetFloat();
@@ -344,11 +344,11 @@ void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
     *ret = rv;
   }
   else
-  {
-    if (!arg1->IsNonComplexScalar())
+  {//If arg1 is a Scalar < If arg2 is a Scalar
+    if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
     
-    if (!arg2->IsNonComplexScalar())
+    if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
     
     *ret = arg1->GetFloat() < arg2->GetFloat();
@@ -385,7 +385,7 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // Vector > Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -396,13 +396,13 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 //      if (a1.GetRows()!=a2.GetRows())
 //        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
     
-    matrix_type rv(size);
-    for (int i=0; i<size; ++i)
+    matrix_type rv(size);//this variable receive the result of operatio
+    for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
     {
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() > a2.At(i).GetFloat();
@@ -415,10 +415,10 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
     // Vector + Scalar
     const matrix_type &a1 = arg1->GetArray();
     
-    matrix_type rv(a1.GetRows());
-    for (int i = 0; i < a1.GetRows(); ++i) {
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
       
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() > arg2->GetFloat();
@@ -428,13 +428,13 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //Scalar > Vector
     const matrix_type &a2 = arg2->GetArray();
     
-    matrix_type rv(a2.GetRows());
-    for (int i = 0; i < a2.GetRows(); ++i) {
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a2.At(i).GetFloat() > arg1->GetFloat();
@@ -443,11 +443,11 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
     *ret = rv;
   }
   else
-  {
-    if (!arg1->IsNonComplexScalar())
+  {//Scalar > Scalar
+    if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
     
-    if (!arg2->IsNonComplexScalar())
+    if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
     
     *ret = arg1->GetFloat() > arg2->GetFloat();
@@ -485,7 +485,7 @@ void OprtLE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // Vector <= Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -512,7 +512,7 @@ void OprtLE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
-    // Vector + Scalar
+    // Vector <= Scalar
     const matrix_type &a1 = arg1->GetArray();
     
     matrix_type rv(a1.GetRows());
@@ -528,7 +528,7 @@ void OprtLE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //Scalar <= Vector
     const matrix_type &a2 = arg2->GetArray();
     
     matrix_type rv(a2.GetRows());
@@ -585,7 +585,7 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   const IValue *arg2 = a_pArg[1].Get();
   if (arg1->GetType()=='m' && arg2->GetType()=='m')
   {
-    // Vector + Vector
+    // Vector >= Vector
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray();
     
@@ -596,13 +596,13 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 //      if (a1.GetRows()!=a2.GetRows())
 //        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
     
-    matrix_type rv(size);
-    for (int i=0; i<size; ++i)
+    matrix_type rv(size);//this variable receive the result of operation
+    for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
     {
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() >= a2.At(i).GetFloat();
@@ -612,13 +612,13 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
-    // Vector + Scalar
+    // Vector >= Scalar
     const matrix_type &a1 = arg1->GetArray();
     
-    matrix_type rv(a1.GetRows());
-    for (int i = 0; i < a1.GetRows(); ++i) {
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
       
-      if (!a1.At(i).IsNonComplexScalar())
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a1.At(i).GetFloat() >= arg2->GetFloat();
@@ -628,13 +628,13 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   }
   
   else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
-    //Scalar + Vector
+    //Scalar >= Vector
     const matrix_type &a2 = arg2->GetArray();
     
-    matrix_type rv(a2.GetRows());
-    for (int i = 0; i < a2.GetRows(); ++i) {
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
       
-      if (!a2.At(i).IsNonComplexScalar())
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
       rv.At(i) = a2.At(i).GetFloat() >= arg1->GetFloat();
@@ -643,11 +643,11 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
     *ret = rv;
   }
   else
-  {
-    if (!arg1->IsNonComplexScalar())
+  {// Scalar >= Scalar
+    if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
     
-    if (!arg2->IsNonComplexScalar())
+    if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
     
     *ret = arg1->GetFloat() >= arg2->GetFloat();
@@ -769,7 +769,80 @@ OprtLogicOr::OprtLogicOr(const char_type *szIdent)
 //-----------------------------------------------------------------------------------------------
 void OprtLogicOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
-  MUP_VERIFY(num == 2);
+  assert(num==2);
+  
+  const IValue *arg1 = a_pArg[0].Get();
+  const IValue *arg2 = a_pArg[1].Get();
+  if (arg1->GetType()=='m' && arg2->GetType()=='m')
+  {
+    // Vector >= Vector
+    const matrix_type &a1 = arg1->GetArray(),
+        &a2 = arg2->GetArray();
+    
+    //Gets the smallest size
+    int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+    
+    //By default this is not allowed, but we want to support different size operations
+//      if (a1.GetRows()!=a2.GetRows())
+//        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
+    
+    matrix_type rv(size);//this variable receive the result of operation
+    for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
+    {
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+      
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 || arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  
+  else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
+    // Vector >= Scalar
+    const matrix_type &a1 = arg1->GetArray();
+    
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
+      
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 || arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  
+  else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
+    //Scalar >= Vector
+    const matrix_type &a2 = arg2->GetArray();
+    
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
+      
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 || arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  else
+  {// Scalar >= Scalar
+    if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
+      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
+    
+    if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
+      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
+    
+    *ret = (float_type)(arg1->GetBool() != 0 || arg2->GetBool() !=0);
+  }
+  
   *ret = a_pArg[0]->GetBool() || a_pArg[1]->GetBool();
 }
 
@@ -798,8 +871,79 @@ OprtLogicAnd::OprtLogicAnd(const char_type *szIdent)
 //-----------------------------------------------------------------------------------------------
 void OprtLogicAnd::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
-  MUP_VERIFY(num == 2);
-  *ret = a_pArg[0]->GetBool() && a_pArg[1]->GetBool();
+  assert(num==2);
+  
+  const IValue *arg1 = a_pArg[0].Get();
+  const IValue *arg2 = a_pArg[1].Get();
+  if (arg1->GetType()=='m' && arg2->GetType()=='m')
+  {
+    // Vector >= Vector
+    const matrix_type &a1 = arg1->GetArray(),
+        &a2 = arg2->GetArray();
+    
+    //Gets the smallest size
+    int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();
+    
+    //By default this is not allowed, but we want to support different size operations
+//      if (a1.GetRows()!=a2.GetRows())
+//        throw ParserError(ErrorContext(ecARRAY_SIZE_MISMATCH, -1, GetIdent(), 'm', 'm', 2));
+    
+    matrix_type rv(size);//this variable receive the result of operation
+    for (int i=0; i<size; ++i)// do the operation between arg1 and agr2 for each element of the smallest array
+    {
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+      
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 && arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  
+  else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {
+    // Vector >= Scalar
+    const matrix_type &a1 = arg1->GetArray();
+    
+    matrix_type rv(a1.GetRows());//this variable receive the result of operation, your size is equal to arg1 size
+    for (int i = 0; i < a1.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg1 (vector)
+      
+      if (!a1.At(i).IsNonComplexScalar())// if the element from array of arg1 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 && arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  
+  else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
+    //Scalar >= Vector
+    const matrix_type &a2 = arg2->GetArray();
+    
+    matrix_type rv(a2.GetRows());//this variable receive the result of operation, your size is equal to arg2 size
+    for (int i = 0; i < a2.GetRows(); ++i) {// do the operation between arg1 and agr2 for each element of the arg2 (vector)
+      
+      if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
+        throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
+      
+      rv.At(i) = (float_type)(arg1->GetBool() != 0 && arg2->GetBool() !=0);
+    }
+    
+    *ret = rv;
+  }
+  else
+  {// Scalar >= Scalar
+    if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar
+      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
+    
+    if (!arg2->IsNonComplexScalar())// if the element of arg2 isn't a non-complex scalar
+      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));
+    
+    *ret = (float_type)(arg1->GetBool() != 0 && arg2->GetBool() !=0);
+  }
 }
 
 //-----------------------------------------------------------------------------------------------
