@@ -38,7 +38,7 @@ endif(MSVC)
 ########################################################################
 file(GLOB MUPARSERX_SOURCES "${MUPARSERX_SOURCE_DIR}/*.cpp")
 include_directories(${MUPARSERX_SOURCE_DIR})
-add_library(muparserx ${MUPARSERX_SOURCES})
+add_library(muparserx ${MUPARSERX_SOURCES} parser/mpOprtElementWise.cpp parser/mpOprtBinCommonElementWise.cpp parser/mpOprtBinCommonElementWise.h)
 set_target_properties(muparserx PROPERTIES VERSION ${MUPARSERX_VERSION})
 set_property(TARGET muparserx PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 set_target_properties(muparserx PROPERTIES SOVERSION ${MUPARSERX_VERSION})
@@ -103,7 +103,7 @@ install(
 
 option(BUILD_EXAMPLES "enable building example applications" ON)
 if(BUILD_EXAMPLES)
-    add_executable(example sample/example.cpp sample/timer.cpp)
+    add_executable(example sample/example.cpp sample/timer.cpp parser/mpOprtElementWise.cpp parser/mpOprtElementWise.cpp parser/mpOprtBinCommonElementWise.cpp parser/mpOprtBinCommonElementWise.h)
     target_link_libraries(example muparserx)
 endif(BUILD_EXAMPLES)
 
