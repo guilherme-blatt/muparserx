@@ -842,8 +842,6 @@ void OprtLogicOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
     
     *ret = (float_type)(arg1->GetBool() != 0 || arg2->GetBool() !=0);
   }
-  
-  *ret = a_pArg[0]->GetBool() || a_pArg[1]->GetBool();
 }
 
 //-----------------------------------------------------------------------------------------------
