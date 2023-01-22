@@ -44,9 +44,6 @@ set_property(TARGET muparserx PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 set_target_properties(muparserx PROPERTIES SOVERSION ${MUPARSERX_VERSION})
 set_target_properties(muparserx PROPERTIES VERSION ${MUPARSERX_VERSION})
 
-#Change by me :)
-target_include_directories(muparserx PUBLIC ${MUPARSERX_SOURCE_DIR})
-
 #link with lib math when found
 find_library(
     M_LIBRARY NAMES m
