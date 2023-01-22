@@ -300,7 +300,7 @@ MUP_NAMESPACE_START
   
       *ret = rv;
     }
-    else if(arg1->IsNonComplexScalar() && arg1->GetType()=='m') {
+    else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {
       //Scalar - Vector
       const matrix_type &a2 = arg2->GetArray();
   
@@ -512,7 +512,7 @@ MUP_NAMESPACE_START
     else if (arg2->GetType()=='m' && arg1->IsNonComplexScalar())
     {
       // Scalar / Vector
-      const matrix_type &a2 = arg1->GetArray();
+      const matrix_type &a2 = arg2->GetArray();
       matrix_type rv(a2.GetRows());
       
       if (arg1->GetFloat() != (float) 0) {
