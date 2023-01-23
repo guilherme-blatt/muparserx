@@ -34,6 +34,7 @@
 #include "mpFuncElementWise.h"
 #include "mpOprtElementWise.h"
 #include "mpOprtBinCommon.h"
+#include "mpValReader.h"
 
 
 MUP_NAMESPACE_START
@@ -55,6 +56,10 @@ IPackage* PackageElementWise::Instance()
 //------------------------------------------------------------------------------
 void PackageElementWise::AddToParser(ParserXBase *pParser)
 {
+  // Number reader
+  pParser->AddValueReader(new DblValReader());
+  
+  // Unary functions
   pParser->DefineFun(new FunSinElementWise());
   pParser->DefineFun(new FunCosElementWise());
   pParser->DefineFun(new FunTanElementWise());
@@ -76,7 +81,7 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunCbrtElementWise());
   pParser->DefineFun(new FunAbsElementWise());
 
-  // binary functions
+  // Binary functions
   pParser->DefineFun(new FunPowElementWise());
   pParser->DefineFun(new FunHypotElementWise());
   pParser->DefineFun(new FunAtan2ElementWise());
