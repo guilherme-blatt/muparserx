@@ -131,7 +131,6 @@ MUP_NAMESPACE_START
       const IValue *arg2 = a_pArg[1].Get();                                                                             \
       if (arg1->GetType()=='m' && arg2->GetType()=='m')                                                                 \
       {                                                                                                                 \
-      \
         /* Vector + Vector*/                                                                                            \
         const matrix_type &a1 = arg1->GetArray(),                                                                       \
             &a2 = arg2->GetArray();                                                                                     \
