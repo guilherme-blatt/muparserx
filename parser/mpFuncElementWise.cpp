@@ -48,24 +48,47 @@
 
 MUP_NAMESPACE_START
 
-#define MUP_UNARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                     \
-    CLASS::CLASS()                                                   \
-    :ICallback(cmFUNC, _T(IDENT), 1)                                 \
-    {}                                                               \
-                                                                     \
-    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)        \
-    {                                                                \
-      *ret = FUNC(a_pArg[0]->GetFloat());                            \
-    }                                                                \
-                                                                     \
-    const char_type* CLASS::GetDesc() const                          \
-    {                                                                \
-      return _T(DESC);                                               \
-    }                                                                \
-                                                                     \
-    IToken* CLASS::Clone() const                                     \
-    {                                                                \
-      return new CLASS(*this);                                       \
+#define MUP_UNARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                                                           \
+    CLASS::CLASS()                                                                                                      \
+    :ICallback(cmFUNC, _T(IDENT), 1)                                                                                    \
+    {}                                                                                                                  \
+                                                                                                                        \
+    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)                                            \
+    {                                                                                                                   \
+      assert(num==1);                                                                                                   \
+      const IValue *arg1 = a_pArg[0].Get();                                                                             \
+      if (arg1->GetType()=='m')                                                                                         \
+      {                                                                                                                 \
+        /* Vector */                                                                                                    \
+        const matrix_type &a1 = arg1->GetArray();                                                                       \
+        matrix_type rv(a1.GetRows());                                                                                   \
+        /* do the operation for each element in arg1 */                                                                 \
+        for (int i=0; i<a1.GetRows(); ++i)                                                                              \
+        {                                                                                                               \
+          if (!a1.At(i).IsNonComplexScalar())/* if the element from array of arg1 isn't a non-complex scalar*/          \
+            throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));          \
+                                                                                                                        \
+          rv.At(i) = FUNC(a1.At(i).GetFloat());                                                                         \
+        }                                                                                                               \
+        *ret = rv;                                                                                                      \
+      }                                                                                                                 \
+      else                                                                                                              \
+      {/* Scalar */                                                                                                     \
+        if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/                          \
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));               \
+                                                                                                                        \
+        *ret = FUNC(arg1->GetFloat());                                                                                  \
+      }                                                                                                                 \
+    }                                                                                                                   \
+                                                                                                                        \
+    const char_type* CLASS::GetDesc() const                                                                             \
+    {                                                                                                                   \
+      return _T(DESC);                                                                                                  \
+    }                                                                                                                   \
+                                                                                                                        \
+    IToken* CLASS::Clone() const                                                                                        \
+    {                                                                                                                   \
+      return new CLASS(*this);                                                                                          \
     }
 
     // trigonometric functions
@@ -96,15 +119,78 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_ELEMENT_WISE(FunAbsElementWise,   "abs",   std::fabs,  "abs(x) - absolute value of x")
 #undef MUP_UNARY_FUNC_ELEMENT_WISE
 
-#define MUP_BINARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC) \
-    CLASS::CLASS()                                                   \
-    :ICallback(cmFUNC, _T(IDENT), 2)                                 \
-    {}                                                               \
-                                                                     \
-    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)        \
-    {                                                                \
-      *ret = FUNC(a_pArg[0]->GetFloat(), a_pArg[1]->GetFloat());     \
-    }                                                                \
+#define MUP_BINARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                                                          \
+    CLASS::CLASS()                                                                                                      \
+    :ICallback(cmFUNC, _T(IDENT), 2)                                                                                    \
+    {}                                                                                                                  \
+                                                                                                                        \
+    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)                                            \
+    {                                                                                                                   \
+      assert(num==2);                                                                                                   \
+      const IValue *arg1 = a_pArg[0].Get();                                                                             \
+      const IValue *arg2 = a_pArg[1].Get();                                                                             \
+      if (arg1->GetType()=='m' && arg2->GetType()=='m')                                                                 \
+      {                                                                                                                 \
+        /* Vector + Vector*/                                                                                            \
+        const matrix_type &a1 = arg1->GetArray(),                                                                       \
+            &a2 = arg2->GetArray();                                                                                     \
+                                                                                                                        \
+        /*Gets the smallest size*/                                                                                      \
+        int size = a1.GetRows() < a2.GetRows() ? a1.GetRows() : a2.GetRows();                                           \
+                                                                                                                        \
+        matrix_type rv(size);/*this variable receive the result of operation*/                                          \
+        for (int i=0; i<size; ++i)/* do the operation between arg1 and agr2 for each element of the smallest array*/    \
+        {                                                                                                               \
+          if (!a1.At(i).IsNonComplexScalar())/* if the element from array of arg1 isn't a non-complex scalar*/          \
+            throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));          \
+                                                                                                                        \
+          if (!a2.At(i).IsNonComplexScalar())/* if the element from array of arg2 isn't a non-complex scalar*/          \
+            throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));          \
+                                                                                                                        \
+          rv.At(i) = FUNC(a1.At(i).GetFloat(), a2.At(i).GetFloat());                                                    \
+        }                                                                                                               \
+        *ret = rv;                                                                                                      \
+      }                                                                                                                 \
+                                                                                                                        \
+      else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar()) {                                                    \
+        /* Vector + Scalar*/                                                                                            \
+        const matrix_type &a1 = arg1->GetArray();                                                                       \
+                                                                                                                        \
+        matrix_type rv(a1.GetRows());/*this variable receive the result of operation, your size is equal to arg1 size*/ \
+        /* do the operation between arg1 and agr2 for each element of the arg1 (vector)*/                               \
+        for (int i = 0; i < a1.GetRows(); ++i) {                                                                        \
+          if (!a1.At(i).IsNonComplexScalar())/* if the element from array of arg1 isn't a non-complex scalar*/          \
+            throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));          \
+                                                                                                                        \
+          rv.At(i) = FUNC(a1.At(i).GetFloat(), arg2->GetFloat());                                                       \
+        }                                                                                                               \
+        *ret = rv;                                                                                                      \
+      }                                                                                                                 \
+                                                                                                                        \
+      else if(arg1->IsNonComplexScalar() && arg2->GetType()=='m') {                                                     \
+        /*Scalar + Vector*/                                                                                             \
+        const matrix_type &a2 = arg2->GetArray();                                                                       \
+        matrix_type rv(a2.GetRows());/*this variable receive the result of operation, your size is equal to arg2 size*/ \
+        /* do the operation between arg1 and agr2 for each element of the arg1 (vector)*/                               \
+        for (int i = 0; i < a2.GetRows(); ++i) {                                                                        \
+          if (!a2.At(i).IsNonComplexScalar())/* if the element from array of arg2 isn't a non-complex scalar*/          \
+            throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));          \
+                                                                                                                        \
+          rv.At(i) = FUNC(arg1->GetFloat(), a2.At(i).GetFloat());                                                       \
+        }                                                                                                               \
+        *ret = rv;                                                                                                      \
+      }                                                                                                                 \
+      else                                                                                                              \
+      {/*Scalar + Scalar*/                                                                                              \
+        if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/                          \
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));               \
+                                                                                                                        \
+        if (!arg2->IsNonComplexScalar())/* if the element of arg2 isn't a non-complex scalar*/                          \
+          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg2->GetType(), 'f', 2));               \
+                                                                                                                        \
+        *ret = FUNC(arg1->GetFloat(), arg2->GetFloat());                                                                \
+      }                                                                                                                 \
+    }                                                                                                                   \
                                                                      \
     const char_type* CLASS::GetDesc() const                          \
     {                                                                \
