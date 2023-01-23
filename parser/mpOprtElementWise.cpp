@@ -310,8 +310,8 @@ MUP_NAMESPACE_START
     
         if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
           throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
-    
-        rv.At(i) = a2.At(i).GetFloat() - arg1->GetFloat();
+  
+        rv.At(i) = arg1->GetFloat() - a2.At(i).GetFloat();
       }
   
       *ret = rv;
