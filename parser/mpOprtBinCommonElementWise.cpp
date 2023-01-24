@@ -28,7 +28,7 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 */
-#include "mpOprtBinCommon.h"
+#include "mpOprtBinCommonElementWise.h"
 #include <cmath>
 #include <limits>
 
@@ -37,16 +37,16 @@ MUP_NAMESPACE_START
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtStrAdd
+// class OprtStrAddElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtStrAdd::OprtStrAdd()
+OprtStrAddElementWise::OprtStrAddElementWise()
     :IOprtBin(_T("//"), (int)prADD_SUB, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtStrAdd::Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc)
+void OprtStrAddElementWise::Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc)
 {
   MUP_VERIFY(argc == 2);
   string_type a = arg[0]->GetString();
@@ -55,30 +55,30 @@ void OprtStrAdd::Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtStrAdd::GetDesc() const
+const char_type* OprtStrAddElementWise::GetDesc() const
 {
   return _T("string concatenation");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtStrAdd::Clone() const
+IToken* OprtStrAddElementWise::Clone() const
 {
-  return new OprtStrAdd(*this);
+  return new OprtStrAddElementWise(*this);
 }
 
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtEQ
+// class OprtEQElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtEQ::OprtEQ()
+OprtEQElementWise::OprtEQElementWise()
     :IOprtBin(_T("=="), (int)prRELATIONAL1, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtEQElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -156,29 +156,29 @@ void OprtEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtEQ::GetDesc() const
+const char_type* OprtEQElementWise::GetDesc() const
 {
   return _T("equals operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtEQ::Clone() const
+IToken* OprtEQElementWise::Clone() const
 {
-  return new OprtEQ(*this);
+  return new OprtEQElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtNEQ
+// class OprtNEQElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtNEQ::OprtNEQ()
+OprtNEQElementWise::OprtNEQElementWise()
     :IOprtBin(_T("!="), (int)prRELATIONAL1, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtNEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtNEQElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -256,29 +256,29 @@ void OprtNEQ::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtNEQ::GetDesc() const
+const char_type* OprtNEQElementWise::GetDesc() const
 {
   return _T("not equal operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtNEQ::Clone() const
+IToken* OprtNEQElementWise::Clone() const
 {
-  return new OprtNEQ(*this);
+  return new OprtNEQElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtLT
+// class OprtLTElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtLT::OprtLT()
+OprtLTElementWise::OprtLTElementWise()
     :IOprtBin(_T("<"), (int)prRELATIONAL2, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtLTElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -356,28 +356,28 @@ void OprtLT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtLT::GetDesc() const
+const char_type* OprtLTElementWise::GetDesc() const
 {
   return _T("less than operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtLT::Clone() const
+IToken* OprtLTElementWise::Clone() const
 {
-  return new OprtLT(*this);
+  return new OprtLTElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtGT
+// class OprtGTElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtGT::OprtGT()
+OprtGTElementWise::OprtGTElementWise()
     :IOprtBin(_T(">"), (int)prRELATIONAL2, oaLEFT) {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtGTElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -455,29 +455,29 @@ void OprtGT::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtGT::GetDesc() const
+const char_type* OprtGTElementWise::GetDesc() const
 {
   return _T("greater than operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtGT::Clone() const
+IToken* OprtGTElementWise::Clone() const
 {
-  return new OprtGT(*this);
+  return new OprtGTElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtLE
+// class OprtLEElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtLE::OprtLE()
+OprtLEElementWise::OprtLEElementWise()
     :IOprtBin(_T("<="), (int)prRELATIONAL2, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtLE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtLEElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -555,29 +555,29 @@ void OprtLE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtLE::GetDesc() const
+const char_type* OprtLEElementWise::GetDesc() const
 {
   return _T("less or equal operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtLE::Clone() const
+IToken* OprtLEElementWise::Clone() const
 {
-  return new OprtLE(*this);
+  return new OprtLEElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtGE
+// class OprtGEElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtGE::OprtGE()
+OprtGEElementWise::OprtGEElementWise()
     :IOprtBin(_T(">="), (int)prRELATIONAL2, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
+void OprtGEElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -655,29 +655,29 @@ void OprtGE::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtGE::GetDesc() const
+const char_type* OprtGEElementWise::GetDesc() const
 {
   return _T("greater or equal operator");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtGE::Clone() const
+IToken* OprtGEElementWise::Clone() const
 {
-  return new OprtGE(*this);
+  return new OprtGEElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtAnd
+// class OprtAndElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtAnd::OprtAnd()
+OprtAndElementWise::OprtAndElementWise()
     :IOprtBin(_T("&"), (int)prBIT_AND, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtAnd::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtAndElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   MUP_VERIFY(num == 2);
   
@@ -700,29 +700,29 @@ void OprtAnd::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtAnd::GetDesc() const
+const char_type* OprtAndElementWise::GetDesc() const
 {
   return _T("bitwise and");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtAnd::Clone() const
+IToken* OprtAndElementWise::Clone() const
 {
-  return new OprtAnd(*this);
+  return new OprtAndElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtOr
+// class OprtOrElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtOr::OprtOr()
+OprtOrElementWise::OprtOrElementWise()
     :IOprtBin(_T("|"), (int)prBIT_OR, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtOrElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   MUP_VERIFY(num == 2);
   
@@ -745,15 +745,15 @@ void OprtOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtOr::GetDesc() const
+const char_type* OprtOrElementWise::GetDesc() const
 {
   return _T("bitwise or");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtOr::Clone() const
+IToken* OprtOrElementWise::Clone() const
 {
-  return new OprtOr(*this);
+  return new OprtOrElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -762,12 +762,12 @@ IToken* OprtOr::Clone() const
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtLogicOr::OprtLogicOr(const char_type *szIdent)
+OprtLogicOrElementWise::OprtLogicOrElementWise(const char_type *szIdent)
     :IOprtBin(szIdent, (int)prLOGIC_OR, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtLogicOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtLogicOrElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -845,15 +845,15 @@ void OprtLogicOr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtLogicOr::GetDesc() const
+const char_type* OprtLogicOrElementWise::GetDesc() const
 {
   return _T("logical or");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtLogicOr::Clone() const
+IToken* OprtLogicOrElementWise::Clone() const
 {
-  return new OprtLogicOr(*this);
+  return new OprtLogicOrElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -862,12 +862,12 @@ IToken* OprtLogicOr::Clone() const
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtLogicAnd::OprtLogicAnd(const char_type *szIdent)
+OprtLogicAndElementWise::OprtLogicAndElementWise(const char_type *szIdent)
     :IOprtBin(szIdent, (int)prLOGIC_AND, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtLogicAnd::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtLogicAndElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   assert(num==2);
   
@@ -945,30 +945,30 @@ void OprtLogicAnd::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtLogicAnd::GetDesc() const
+const char_type* OprtLogicAndElementWise::GetDesc() const
 {
   return _T("logical and");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtLogicAnd::Clone() const
+IToken* OprtLogicAndElementWise::Clone() const
 {
-  return new OprtLogicAnd(*this);
+  return new OprtLogicAndElementWise(*this);
 }
 
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtShl
+// class OprtShlElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtShl::OprtShl()
+OprtShlElementWise::OprtShlElementWise()
     :IOprtBin(_T("<<"), (int)prSHIFT, oaLEFT)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtShl::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtShlElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   MUP_VERIFY(num == 2);
   
@@ -1004,29 +1004,29 @@ void OprtShl::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtShl::GetDesc() const
+const char_type* OprtShlElementWise::GetDesc() const
 {
   return _T("shift left");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtShl::Clone() const
+IToken* OprtShlElementWise::Clone() const
 {
-  return new OprtShl(*this);
+  return new OprtShlElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
 //
-// class OprtShr
+// class OprtShrElementWise
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtShr::OprtShr()
+OprtShrElementWise::OprtShrElementWise()
     :IOprtBin(_T(">>"), (int)prSHIFT, oaLEFT)
 {}
 
 //-----------------------------------------------------------
-void OprtShr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
+void OprtShrElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
   MUP_VERIFY(num == 2);
   
@@ -1058,15 +1058,15 @@ void OprtShr::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtShr::GetDesc() const
+const char_type* OprtShrElementWise::GetDesc() const
 {
   return _T("shift right");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtShr::Clone() const
+IToken* OprtShrElementWise::Clone() const
 {
-  return new OprtShr(*this);
+  return new OprtShrElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -1075,12 +1075,12 @@ IToken* OprtShr::Clone() const
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtCastToFloat::OprtCastToFloat()
+OprtCastToFloatElementWise::OprtCastToFloatElementWise()
     :IOprtInfix(_T("(float)"), prINFIX)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtCastToFloat::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*a_iArgc*/)
+void OprtCastToFloatElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*a_iArgc*/)
 {
   switch (a_pArg[0]->GetType())
   {
@@ -1102,15 +1102,15 @@ void OprtCastToFloat::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtCastToFloat::GetDesc() const
+const char_type* OprtCastToFloatElementWise::GetDesc() const
 {
   return _T("cast a value into a floating point number");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtCastToFloat::Clone() const
+IToken* OprtCastToFloatElementWise::Clone() const
 {
-  return new OprtCastToFloat(*this);
+  return new OprtCastToFloatElementWise(*this);
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -1119,12 +1119,12 @@ IToken* OprtCastToFloat::Clone() const
 //
 //-----------------------------------------------------------------------------------------------
 
-OprtCastToInt::OprtCastToInt()
+OprtCastToIntElementWise::OprtCastToIntElementWise()
     :IOprtInfix(_T("(int)"), prINFIX)
 {}
 
 //-----------------------------------------------------------------------------------------------
-void OprtCastToInt::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*a_iArgc*/)
+void OprtCastToIntElementWise::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*a_iArgc*/)
 {
   switch (a_pArg[0]->GetType())
   {
@@ -1146,15 +1146,15 @@ void OprtCastToInt::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int /*a_
 }
 
 //-----------------------------------------------------------------------------------------------
-const char_type* OprtCastToInt::GetDesc() const
+const char_type* OprtCastToIntElementWise::GetDesc() const
 {
   return _T("cast a value into a floating point number");
 }
 
 //-----------------------------------------------------------------------------------------------
-IToken* OprtCastToInt::Clone() const
+IToken* OprtCastToIntElementWise::Clone() const
 {
-  return new OprtCastToInt(*this);
+  return new OprtCastToIntElementWise(*this);
 }
 
 }

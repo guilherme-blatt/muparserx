@@ -28,8 +28,8 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
     */
-#ifndef MP_OPRT_BIN_H
-#define MP_OPRT_BIN_H
+#ifndef MP_OPRT_BIN_ELEMENT_WISE_H
+#define MP_OPRT_BIN_ELEMENT_WISE_H
 
 /** \file
     \brief Definitions of classes used as callbacks for standard binary operators.
@@ -49,10 +49,10 @@
 MUP_NAMESPACE_START
 
 
-class OprtStrAdd : public IOprtBin
+class OprtStrAddElementWise : public IOprtBin
 {
 public:
-  OprtStrAdd();
+  OprtStrAddElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -62,10 +62,10 @@ public:
 /** \brief Callback object for testing if two values are equal.
     \ingroup binop
     */
-class OprtEQ : public IOprtBin
+class OprtEQElementWise : public IOprtBin
 {
 public:
-  OprtEQ();
+  OprtEQElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -75,10 +75,10 @@ public:
 /** \brief Callback object for testing if two values are not equal.
     \ingroup binop
     */
-class OprtNEQ : public IOprtBin
+class OprtNEQElementWise : public IOprtBin
 {
 public:
-  OprtNEQ();
+  OprtNEQElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -88,10 +88,10 @@ public:
 /** \brief Callback object class for the "Less than" operator.
     \ingroup binop
     */
-class OprtLT : public IOprtBin
+class OprtLTElementWise : public IOprtBin
 {
 public:
-  OprtLT();
+  OprtLTElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -101,10 +101,10 @@ public:
 /** \brief Callback object class for the "Greater than" operator.
     \ingroup binop
     */
-class OprtGT : public IOprtBin
+class OprtGTElementWise : public IOprtBin
 {
 public:
-  OprtGT();
+  OprtGTElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -114,10 +114,10 @@ public:
 /** \brief Callback object class for the "Less or equal" operator.
     \ingroup binop
     */
-class OprtLE : public IOprtBin
+class OprtLEElementWise : public IOprtBin
 {
 public:
-  OprtLE();
+  OprtLEElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -127,10 +127,10 @@ public:
 /** \brief Callback object class for the "Greater or or equal" operator.
     \ingroup binop
     */
-class OprtGE : public IOprtBin
+class OprtGEElementWise : public IOprtBin
 {
 public:
-  OprtGE();
+  OprtGEElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -140,10 +140,10 @@ public:
 /** \brief Callback class for a logic and operator.
     \ingroup binop
     */
-class OprtAnd : public IOprtBin
+class OprtAndElementWise : public IOprtBin
 {
 public:
-  OprtAnd();
+  OprtAndElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -153,10 +153,10 @@ public:
 /** \brief Callback class for a logic or operator.
     \ingroup binop
     */
-class OprtOr : public IOprtBin
+class OprtOrElementWise : public IOprtBin
 {
 public:
-  OprtOr();
+  OprtOrElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -166,10 +166,10 @@ public:
 /** \brief Callback class for a logical or operator.
     \ingroup binop
 */
-class OprtLogicOr : public IOprtBin
+class OprtLogicOrElementWise : public IOprtBin
 {
 public:
-  OprtLogicOr(const char_type* szIdent = _T("||"));
+  OprtLogicOrElementWise(const char_type* szIdent = _T("||"));
   virtual void Eval(ptr_val_type& ret, const ptr_val_type* a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -179,10 +179,10 @@ public:
 /** \brief Callback class for a logical and operator.
     \ingroup binop
 */
-class OprtLogicAnd : public IOprtBin
+class OprtLogicAndElementWise : public IOprtBin
 {
 public:
-  OprtLogicAnd(const char_type* szIdent = _T("&&"));
+  OprtLogicAndElementWise(const char_type* szIdent = _T("&&"));
   virtual void Eval(ptr_val_type& ret, const ptr_val_type* a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -192,10 +192,10 @@ public:
 /** \brief Callback class for the shift left operator.
     \ingroup binop
     */
-class OprtShl : public IOprtBin
+class OprtShlElementWise : public IOprtBin
 {
 public:
-  OprtShl();
+  OprtShlElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -205,10 +205,10 @@ public:
 /** \brief Callback class for the shift right operator.
     \ingroup binop
     */
-class OprtShr : public IOprtBin
+class OprtShrElementWise : public IOprtBin
 {
 public:
-  OprtShr();
+  OprtShrElementWise();
   virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
@@ -219,27 +219,27 @@ public:
            point values.
            \ingroup infix
            */
-class OprtCastToFloat : public IOprtInfix
+class OprtCastToFloatElementWise : public IOprtInfix
 {
 public:
-  OprtCastToFloat();
+  OprtCastToFloatElementWise();
   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
-}; // class OprtCastToFloat
+}; // class OprtCastToFloatElementWise
 
 
 /** \brief Callback for an operator allowing to cast values to integer values.
     \ingroup infix
 */
-class OprtCastToInt : public IOprtInfix
+class OprtCastToIntElementWise : public IOprtInfix
 {
 public:
-  OprtCastToInt();
+  OprtCastToIntElementWise();
   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
   virtual const char_type* GetDesc() const override;
   virtual IToken* Clone() const override;
-}; // class OprtCastToInt
+}; // class OprtCastToIntElementWise
 
 }  // namespace mu
 
