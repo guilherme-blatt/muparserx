@@ -598,7 +598,9 @@ MUP_NAMESPACE_START
 //          *ret = std::pow(a1.At(i).GetFloat(), ib);
 //        }
 //        else
-          *ret = std::pow(a1.At(i).GetFloat(), a2.At(i).GetFloat());
+          std::cout << "a1.At(i) = " << a1.At(i).GetFloat() << std::endl;
+          std::cout << "a2.At(i) = " << a2.At(i).GetFloat() << std::endl;
+          *ret = std::pow((int) a1.At(i).GetFloat(), (int) a2.At(i).GetFloat());
       }
     }
     else if (arg1->GetType() == 'm' && arg2->IsNonComplexScalar()){

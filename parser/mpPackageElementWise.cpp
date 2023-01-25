@@ -35,6 +35,7 @@
 #include "mpOprtElementWise.h"
 #include "mpOprtBinCommon.h"
 #include "mpValReader.h"
+#include "mpOprtBinCommonElementWise.h"
 
 
 MUP_NAMESPACE_START
@@ -96,6 +97,7 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   pParser->DefineOprt(new OprtMulElementWise());
   pParser->DefineOprt(new OprtDivElementWise());
   pParser->DefineOprt(new OprtPowElementWise());
+  pParser->DefineOprt(new OprtLogicOrElementWise("||"));
 }
 
 //------------------------------------------------------------------------------
