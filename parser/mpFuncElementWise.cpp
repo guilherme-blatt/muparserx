@@ -108,9 +108,9 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_ELEMENT_WISE(FunACosHElementWise, "acosh", std::acosh, "hyperbolic arcus cosine")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunATanHElementWise, "atanh", std::atanh, "hyperbolic arcus tangens")
     // logarithm functions
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLogElementWise,   "log",   std::log,   "Natural logarithm")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog10ElementWise, "log10", std::log10, "Logarithm base 10")
-    MUP_UNARY_FUNC_ELEMENT_WISE(FunLog2ElementWise,  "log2",  std::log2,  "Logarithm base 2")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunLogElementWise,   "log",   std::log10,   "Natural logarithm")
+    //MUP_UNARY_FUNC_ELEMENT_WISE(FunLog10ElementWise, "log10", std::log10, "Logarithm base 10")
+    //MUP_UNARY_FUNC_ELEMENT_WISE(FunLog2ElementWise,  "log2",  std::log2,  "Logarithm base 2")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunLnElementWise,    "ln",    std::log,   "Natural logarithm")
     // square root
     MUP_UNARY_FUNC_ELEMENT_WISE(FunSqrtElementWise,  "sqrt",  std::sqrt,  "sqrt(x) - square root of x")

@@ -11,7 +11,7 @@ if (GTest_FOUND OR gtest_POPULATED)
       src/ElementWiseOperatorsTest.cpp)
   
   #add_executable(${PROJECT_NAME}_Tests ${TESTS_SRC})
-  add_executable(${PROJECT_NAME}_Tests src/ElementWiseOperatorsTest.cpp)
+  add_executable(${PROJECT_NAME}_Tests src/ElementWiseOperatorsTest.cpp src/ElementWiseLogicalOperatorsTest.cpp src/ElementWiseLogicalOperatorsTest.cpp src/ElementWiseFunctionsTest.cpp)
   
   #set_target_properties(${PROJECT_NAME}_Tests PROPERTIES
   #                      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")

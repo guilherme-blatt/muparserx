@@ -598,10 +598,9 @@ MUP_NAMESPACE_START
 //          *ret = std::pow(a1.At(i).GetFloat(), ib);
 //        }
 //        else
-          std::cout << "a1.At(i) = " << a1.At(i).GetFloat() << std::endl;
-          std::cout << "a2.At(i) = " << a2.At(i).GetFloat() << std::endl;
-          *ret = std::pow((int) a1.At(i).GetFloat(), (int) a2.At(i).GetFloat());
+          rv.At(i) = std::pow((int) a1.At(i).GetFloat(), (int) a2.At(i).GetFloat());
       }
+      *ret = rv;
     }
     else if (arg1->GetType() == 'm' && arg2->IsNonComplexScalar()){
       // Vector ^ Scalar
@@ -617,8 +616,9 @@ MUP_NAMESPACE_START
         //  *ret = std::pow(a1.At(i).GetFloat(), ib);
         //}
         //else
-          *ret = std::pow(a1.At(i).GetFloat(), arg2->GetFloat());
+          rv.At(i) = std::pow(a1.At(i).GetFloat(), arg2->GetFloat());
       }
+      *ret = rv;
     }
     else if (arg2->GetType() == 'm' && arg1->IsNonComplexScalar()){
       // Scalar ^ Vector
@@ -634,8 +634,9 @@ MUP_NAMESPACE_START
         //  *ret = std::pow(a2.At(i).GetFloat(), ib);
         //}
         //else
-          *ret = std::pow(arg1->GetFloat(), a2.At(i).GetFloat());
+          rv.At(i)= std::pow(arg1->GetFloat(), a2.At(i).GetFloat());
       }
+      *ret = rv;
     }
     else{
       if (!arg1->IsNonComplexScalar())// if the element of arg1 isn't a non-complex scalar

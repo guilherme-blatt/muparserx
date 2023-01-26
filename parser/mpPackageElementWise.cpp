@@ -74,8 +74,8 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunACosHElementWise());
   pParser->DefineFun(new FunATanHElementWise());
   pParser->DefineFun(new FunLogElementWise());
-  pParser->DefineFun(new FunLog10ElementWise());
-  pParser->DefineFun(new FunLog2ElementWise());
+  //pParser->DefineFun(new FunLog10ElementWise());
+  //pParser->DefineFun(new FunLog2ElementWise());
   pParser->DefineFun(new FunLnElementWise());
   pParser->DefineFun(new FunExpElementWise());
   pParser->DefineFun(new FunSqrtElementWise());
@@ -98,6 +98,9 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   pParser->DefineOprt(new OprtDivElementWise());
   pParser->DefineOprt(new OprtPowElementWise());
   pParser->DefineOprt(new OprtLogicOrElementWise("||"));
+  pParser->DefineOprt(new OprtLogicOrElementWise("OR"));
+  pParser->DefineOprt(new OprtLogicAndElementWise("&&"));
+  pParser->DefineOprt(new OprtLogicAndElementWise("AND"));
 }
 
 //------------------------------------------------------------------------------
