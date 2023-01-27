@@ -130,3 +130,335 @@ TEST_F(LogicalOperatorPackageFixture, AndOperation)
   }
 }
 
+TEST_F(LogicalOperatorPackageFixture, TextOrOperation)
+{
+  //Array OR array
+  parser.SetExpr("dc1 OR dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) (v1_[l] || v2_[l]));
+  }
+  
+  //Array OR scalar
+  parser.SetExpr("dc1 OR 0");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) (v1_[l] || 0));
+  }
+  
+  //Scalar OR array
+  parser.SetExpr("0 OR dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type)(0 || v2_[l]));
+  }
+  
+  //Scalar OR scalar
+  parser.SetExpr("10 || 0");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetInteger(), 1);
+  
+  //Array OR array different sizes
+  parser.SetExpr("dc1 OR dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) v1_[l] || v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, TextAndOperation)
+{
+  //Array AND array
+  parser.SetExpr("dc1 AND dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) (v1_[l] && v2_[l]));
+  }
+  
+  //Array AND scalar
+  parser.SetExpr("dc1 AND 0");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) (v1_[l] && 0));
+  }
+  
+  //Scalar AND array
+  parser.SetExpr("0 AND dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type)(0 && v2_[l]));
+  }
+  
+  //Scalar AND scalar
+  parser.SetExpr("10 AND 0");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetInteger(), 0);
+  
+  //Array AND array different sizes
+  parser.SetExpr("dc1 AND dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), (mup::float_type) v1_[l] && v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, EqualOperation){
+  //Array == array
+  parser.SetExpr("dc1 == dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] == v2_[l]);
+  }
+
+  //Array == scalar
+  parser.SetExpr("dc1 == 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] == 50);
+  }
+
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) == (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] == -50);
+  }
+
+  //Scalar == array
+  parser.SetExpr("50 == dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 == v2_[l]);
+  }
+
+  //Scalar == scalar
+  parser.SetExpr("50 == 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 0);
+
+  //Array == array different sizes
+  parser.SetExpr("dc1 == dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] == v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, NotEqualOperation){
+  //Array == array
+  parser.SetExpr("dc1 != dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] != v2_[l]);
+  }
+  
+  //Array == scalar
+  parser.SetExpr("dc1 != 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] != 50);
+  }
+  
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) != (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] != -50);
+  }
+  
+  //Scalar == array
+  parser.SetExpr("50 != dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 != v2_[l]);
+  }
+  
+  //Scalar == scalar
+  parser.SetExpr("50 != 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 1);
+  
+  //Array == array different sizes
+  parser.SetExpr("dc1 != dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] != v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, LessThanOperation){
+  //Array == array
+  parser.SetExpr("dc1 < dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] < v2_[l]);
+  }
+  
+  //Array == scalar
+  parser.SetExpr("dc1 < 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] < 50);
+  }
+  
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) < (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] < -50);
+  }
+  
+  //Scalar == array
+  parser.SetExpr("50 < dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 < v2_[l]) << "Resultado: " << result.At(l).GetFloat() <<"\n" << "v2_[l]: "
+    << v2_[l];
+  }
+  
+  //Scalar == scalar
+  parser.SetExpr("50 < 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 0);
+  
+  //Array == array different sizes
+  parser.SetExpr("dc1 < dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] < v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, GreaterThanOperation){
+  //Array == array
+  parser.SetExpr("dc1 > dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] > v2_[l]);
+  }
+  
+  //Array == scalar
+  parser.SetExpr("dc1 > 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] > 50);
+  }
+  
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) > (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] > -50);
+  }
+  
+  //Scalar == array
+  parser.SetExpr("50 > dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 > v2_[l]);
+  }
+  
+  //Scalar == scalar
+  parser.SetExpr("50 > 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 1);
+  
+  //Array == array different sizes
+  parser.SetExpr("dc1 > dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] > v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, LessThanOrEqualToOperation){
+  //Array == array
+  parser.SetExpr("dc1 <= dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] <= v2_[l]);
+  }
+  
+  //Array == scalar
+  parser.SetExpr("dc1 <= 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] <= 50);
+  }
+  
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) <= (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] <= -50);
+  }
+  
+  //Scalar == array
+  parser.SetExpr("50 <= dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 <= v2_[l]);
+  }
+  
+  //Scalar == scalar
+  parser.SetExpr("50 <= 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 0);
+  
+  //Array == array different sizes
+  parser.SetExpr("dc1 <= dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] <= v4_[l]);
+  }
+}
+
+TEST_F(LogicalOperatorPackageFixture, GreaterThanOrEqualToOperation){
+  //Array == array
+  parser.SetExpr("dc1 >= dc2");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] >= v2_[l]);
+  }
+  
+  //Array == scalar
+  parser.SetExpr("dc1 >= 50");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] >= 50);
+  }
+  
+  //-Array == -scalar
+  parser.SetExpr("(-dc1) >= (-50)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), -v1_[l] >= -50);
+  }
+  
+  //Scalar == array
+  parser.SetExpr("50 >= dc2");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), 50 >= v2_[l]);
+  }
+  
+  //Scalar == scalar
+  parser.SetExpr("50 >= 10");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 1);
+  
+  //Array == array different sizes
+  parser.SetExpr("dc1 >= dc4");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetRows(), v4_.size());
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l] >= v4_[l]);
+  }
+}

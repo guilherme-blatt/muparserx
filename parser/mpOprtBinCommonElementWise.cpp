@@ -338,7 +338,7 @@ void OprtLTElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int 
       if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
-      rv.At(i) = a2.At(i).GetFloat() < arg1->GetFloat();
+      rv.At(i) = arg1->GetFloat() < a2.At(i).GetFloat();
     }
     
     *ret = rv;
@@ -437,7 +437,7 @@ void OprtGTElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int 
       if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
-      rv.At(i) = a2.At(i).GetFloat() > arg1->GetFloat();
+      rv.At(i) = arg1->GetFloat() > a2.At(i).GetFloat();
     }
     
     *ret = rv;
@@ -537,7 +537,7 @@ void OprtLEElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int 
       if (!a2.At(i).IsNonComplexScalar())
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
-      rv.At(i) = a2.At(i).GetFloat() <= arg1->GetFloat();
+      rv.At(i) = arg1->GetFloat() <= a2.At(i).GetFloat();
     }
     
     *ret = rv;
@@ -637,7 +637,7 @@ void OprtGEElementWise::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int 
       if (!a2.At(i).IsNonComplexScalar())// if the element from array of arg2 isn't a non-complex scalar
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a2.At(i).GetType(), 'f', 1));
       
-      rv.At(i) = a2.At(i).GetFloat() >= arg1->GetFloat();
+      rv.At(i) = arg1->GetFloat() >= a2.At(i).GetFloat();
     }
     
     *ret = rv;

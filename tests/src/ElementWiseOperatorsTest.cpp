@@ -169,40 +169,41 @@ TEST_F(MathPackageFixture, MinusOperation)
 
 TEST_F(MathPackageFixture, MultiplicationOperation)
 {
-  //Array + array
+  //Array * array
   parser.SetExpr("dc1 * dc2");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), v1_[l] * v2_[l], 1E-6);
   }
   
-  //Array + scalar
+  //Array * scalar
   parser.SetExpr("dc1 * 50");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), v1_[l] * 50, 1E-6);
   }
   
+  //-Array * -scalar
   parser.SetExpr("(-dc1) * (-50)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), -v1_[l] * -50, 1E-6);
   }
   
-  //Scalar + array
+  //Scalar * array
   parser.SetExpr("50 * dc2");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), 50 * v2_[l], 1E-6);
   }
   
-  //Scalar + scalar
+  //Scalar * scalar
   parser.SetExpr("50 * 100");
   result = parser.Eval();
   EXPECT_NEAR(result.GetFloat(), 50*100, 1E-4);
   EXPECT_EQ(result.GetInteger(), 50*100);
   
-  //Array + array different sizes
+  //Array * array different sizes
   parser.SetExpr("dc1 * dc4");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
@@ -213,7 +214,7 @@ TEST_F(MathPackageFixture, MultiplicationOperation)
 
 TEST_F(MathPackageFixture, DivisionOperation)
 {
-  //Array + array
+  //Array / array
   parser.SetExpr("dc1 / dc2");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {

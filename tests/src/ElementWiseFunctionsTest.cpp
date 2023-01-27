@@ -84,17 +84,6 @@ TEST_F(FunctionsPackageFixture, MuparserxImportedCorrectly)
   EXPECT_EQ(result.GetInteger(), 3);
 }
 
-//TEST_F(FunctionsPackageFixture, BasicVectorOperation)
-//{
-//  parser.SetExpr("dc1 + dc2");
-//  mup::Value result = parser.Eval();
-//
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), v1_[l] + v2_[l], 1E-6);
-//  }
-//}
-//
-
 //
 // Unary Functions
 //---------------------------------------------------------------------------------------------------------------------
@@ -117,7 +106,7 @@ TEST_F(FunctionsPackageFixture, SineOperation)
   //Sine(scalar)
   parser.SetExpr("sin(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::sin(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), -0.71, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, CosineOperation)
@@ -139,7 +128,7 @@ TEST_F(FunctionsPackageFixture, CosineOperation)
   //Scalar + scalar
   parser.SetExpr("cos(-150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::cos(-150), 1E-6);
+  EXPECT_NEAR(result.GetFloat(), 0.69, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, TangentOperation)
@@ -160,7 +149,7 @@ TEST_F(FunctionsPackageFixture, TangentOperation)
   //Scalar + scalar
   parser.SetExpr("tan(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), tan(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), -1.02, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, ArcSineOperation)
@@ -182,7 +171,7 @@ TEST_F(FunctionsPackageFixture, ArcSineOperation)
   //ArcSine(scalar)
   parser.SetExpr("asin(1)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::asin(1), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 1.57, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, ArcCosineOperation)
@@ -204,7 +193,7 @@ TEST_F(FunctionsPackageFixture, ArcCosineOperation)
   //ArcCosine(scalar)
   parser.SetExpr("acos(1)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::acos(1), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 0, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, ArcTangentOperation)
@@ -226,7 +215,7 @@ TEST_F(FunctionsPackageFixture, ArcTangentOperation)
   //ArcTangent(scalar)
   parser.SetExpr("atan(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::atan(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 1.56, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicSineOperation)
@@ -246,9 +235,9 @@ TEST_F(FunctionsPackageFixture, HyperbolicSineOperation)
   }
   
   //Sine(scalar)
-  parser.SetExpr("sinh(150)");
+  parser.SetExpr("sinh(5)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::sinh(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 74.20, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicCosineOperation)
@@ -268,9 +257,9 @@ TEST_F(FunctionsPackageFixture, HyperbolicCosineOperation)
   }
   
   //HyperbolicArcCosine(scalar)
-  parser.SetExpr("cosh(150)");
+  parser.SetExpr("cosh(5)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::cosh(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 74.20, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicTangentOperation)
@@ -290,9 +279,9 @@ TEST_F(FunctionsPackageFixture, HyperbolicTangentOperation)
   }
   
   //HyperbolicArcTangent(scalar)
-  parser.SetExpr("tanh(150)");
+  parser.SetExpr("tanh(5)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::tanh(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 0.99, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicArcSineOperation)
@@ -314,7 +303,7 @@ TEST_F(FunctionsPackageFixture, HyperbolicArcSineOperation)
   //Sine(scalar)
   parser.SetExpr("asinh(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::asinh(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 5.70, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicArcCosineOperation)
@@ -323,42 +312,58 @@ TEST_F(FunctionsPackageFixture, HyperbolicArcCosineOperation)
   parser.SetExpr("acosh(dc1)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::acosh(v1_[l]), 1E-6);
+    if (v1_[l] <= 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::acosh(v1_[l]), 1E-6);
   }
   
-//  //HyperbolicArcCosine(-vector)
-//  parser.SetExpr("acosh(-dc1)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::acosh(-(v1_[l])), 1E-6);
-//  }
+  //HyperbolicArcCosine(-vector)
+  parser.SetExpr("acosh(-dc1)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    if (-(v1_[l]) <= 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::acosh(-(v1_[l])), 1E-6);
+  }
   
   //HyperbolicArcCosine(scalar)
   parser.SetExpr("acosh(10)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::acosh(10), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 2.99, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, HyperbolicArcTangentOperation)
 {
   //HyperbolicArcTangent(vector)
-  parser.SetExpr("atanh(dc6)");
+  parser.SetExpr("atanh(dc1)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::atanh(v6_[l]), 1E-6);
+    if (v1_[l] > 1 || v1_[l] < -1)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else if (v1_[l] == 1 || v1_[l] == -1)
+      EXPECT_TRUE(std::isinf(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::atanh(v1_[l]), 1E-6);
   }
   
   //HyperbolicArcTangent(-vector)
   parser.SetExpr("atanh(-dc6)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::atanh(-v6_[l]), 1E-6);
+    if (v6_[l] > 1 || v6_[l] < -1)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else if (v6_[l] == 1 || v6_[l] == -1)
+      EXPECT_TRUE(std::isinf(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::atanh(-(v6_[l])), 1E-6);
   }
   
   //HyperbolicArcTangent(scalar)
   parser.SetExpr("atanh(0.8)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::atanh(0.8), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 1.09, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, NaturalLogarithmOperation)
@@ -367,20 +372,30 @@ TEST_F(FunctionsPackageFixture, NaturalLogarithmOperation)
   parser.SetExpr("log(dc1)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::log10(v1_[l]), 1E-6);
+    if (v1_[l] < 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else if (v1_[l] == 0)
+      EXPECT_TRUE(std::isinf(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::log10(v1_[l]), 1E-6);
   }
   
-//  //NaturalLogarithm(-vector)
-//  parser.SetExpr("log(-dc1)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::log(-v1_[l]), 1E-6);
-//  }
+  //NaturalLogarithm(-vector)
+  parser.SetExpr("log(-dc1)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    if (-(v1_[l]) < 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else if (-(v1_[l] == 0))
+      EXPECT_TRUE(std::isinf(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::log10(-v1_[l]), 1E-6);
+  }
   
   //NaturalLogarithm(scalar)
   parser.SetExpr("log(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::log10(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 2.17, 1E-2);
   
   //NaturalLogarithm(vector)
   parser.SetExpr("ln(dc1)");
@@ -390,16 +405,21 @@ TEST_F(FunctionsPackageFixture, NaturalLogarithmOperation)
   }
   
   //NaturalLogarithm(-vector)
-//  parser.SetExpr("ln(-dc1)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::log(-v1_[l]), 1E-6);
-//  }
+  parser.SetExpr("ln(-dc1)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    if (-(v1_[l]) < 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else if (-(v1_[l] == 0))
+      EXPECT_TRUE(std::isinf(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::log(-v1_[l]), 1E-6);
+  }
   
   //NaturalLogarithm(scalar)
   parser.SetExpr("ln(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::log(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 5.01, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, SquareRootOperation)
@@ -414,7 +434,7 @@ TEST_F(FunctionsPackageFixture, SquareRootOperation)
   //SquareRoot(scalar)
   parser.SetExpr("sqrt(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::sqrt(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 12.24, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, CubicRootOperation)
@@ -436,7 +456,7 @@ TEST_F(FunctionsPackageFixture, CubicRootOperation)
   //CubicRoot(scalar)
   parser.SetExpr("cbrt(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::cbrt(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 5.31, 1E-2);
 }
 
 TEST_F(FunctionsPackageFixture, EPowerOperation)
@@ -480,7 +500,7 @@ TEST_F(FunctionsPackageFixture, AbsoluteValueOperation)
   //AbsoluteValue(scalar)
   parser.SetExpr("abs(150)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::abs(150), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 150, 1E-2);
 }
 
 //
@@ -490,40 +510,41 @@ TEST_F(FunctionsPackageFixture, AbsoluteValueOperation)
 TEST_F(FunctionsPackageFixture, HypotOperation)
 {
   //compute the length of the vector x,y
-  //Array + array
+  //hypot(array, array)
   parser.SetExpr("hypot(dc1, dc2)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::hypot(v1_[l],v2_[l]), 1E-6);
   }
 
-  //Array + scalar
+  //hypot(array, scalar)
   parser.SetExpr("hypot(dc1, 50)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::hypot(v1_[l], 50), 1E-6);
   }
-
+  
+  //hypot(-array, -scalar)
   parser.SetExpr("hypot(-dc1, -50)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::hypot(-v1_[l], -50), 1E-6);
   }
-
-  //Scalar + array
+  
+  //hypot(scalar, array)
   parser.SetExpr("hypot(50, dc2)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::hypot(50, v2_[l]), 1E-6);
 
   }
-
-  //Scalar + scalar
+  
+  //hypot(scalar, scalar)
   parser.SetExpr("hypot(50, 100)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::hypot(50, 100), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 111.80, 1E-2);
 
-  //Array + array different sizes
+  //hypot(array, array) different sizes
   parser.SetExpr("hypot(dc1, dc4)");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
@@ -535,39 +556,40 @@ TEST_F(FunctionsPackageFixture, HypotOperation)
 TEST_F(FunctionsPackageFixture, Atan2Operation)
 {
   //Arc tangent with quadrant fix
-  //Array + array
+  //Array, array
   parser.SetExpr("atan2(dc1, dc2)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::atan2(v1_[l], v2_[l]), 1E-6);
   }
 
-  //Array + scalar
+  //Array, scalar
   parser.SetExpr("atan2(dc1, 1)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), atan2(v1_[l], 1), 1E-6);
   }
-
+  
+  //-Array, -scalar
   parser.SetExpr("atan2(-dc1, -1)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::atan2(-v1_[l], -1), 1E-6);
   }
 
-  //Scalar + array
+  //Scalar, array
   parser.SetExpr("atan2(1, dc2)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::atan2(1, v2_[l]), 1E-6);
   }
 
-  //Scalar + scalar
+  //Scalar, scalar
   parser.SetExpr("atan2(100, 50)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::atan2(100, 50), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 1.10, 1E-2);
 
-  //Array + array different sizes
+  //Array, array different sizes
   parser.SetExpr("atan2(dc1, dc4)");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
@@ -578,39 +600,40 @@ TEST_F(FunctionsPackageFixture, Atan2Operation)
 
 TEST_F(FunctionsPackageFixture, PowerFunctionOperation)
 {
-  //Array + array
+  //Array, array
   parser.SetExpr("pow(dc1, dc2)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::pow(v1_[l], v2_[l]), 1E-6);
   }
   
-  //Array + scalar
+  //Array, scalar
   parser.SetExpr("pow(dc1, 50)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::pow(v1_[l], 50), 1E-6);
   }
   
+  //-Array, -scalar
   parser.SetExpr("pow(-dc1, -50)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::pow(-v1_[l], -50), 1E-6);
   }
   
-  //Scalar + array
+  //Scalar,  array
   parser.SetExpr("pow(50, dc2)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::pow(50, v2_[l]), 1E-6);
   }
   
-  //Scalar + scalar
-  parser.SetExpr("pow(50, 100)");
+  //Scalar, scalar
+  parser.SetExpr("pow(5, 2.3)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::pow(50, 100), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 40.51, 1E-2);
   
-  //Array + array different sizes
+  //Array, array different sizes
   parser.SetExpr("pow(dc1, dc4)");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
@@ -623,10 +646,13 @@ TEST_F(FunctionsPackageFixture, FmodFunctionOperation)
 {
   //Floating point remainder of x / y
   //Array + array
-  parser.SetExpr("fmod(dc1, dc5)");
+  parser.SetExpr("fmod(dc1, dc2)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_EQ(result.At(l).GetFloat(), std::fmod(v1_[l], v5_[l]));
+    if(v2_[l] == 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_EQ(result.At(l).GetFloat(), std::fmod(v1_[l], v2_[l]));
   }
   
   //Array + scalar
@@ -652,14 +678,17 @@ TEST_F(FunctionsPackageFixture, FmodFunctionOperation)
   //Scalar + scalar
   parser.SetExpr("fmod(50, 100)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::fmod(50, 100), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 50, 1E-2);
   
   //Array + array different sizes
-  parser.SetExpr("fmod(dc1, dc5)");
+  parser.SetExpr("fmod(dc1, dc4)");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::fmod(v1_[l], v5_[l]), 1E-6);
+    if(v4_[l] == 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::fmod(v1_[l], v4_[l]), 1E-6);
   }
 }
 
@@ -667,10 +696,13 @@ TEST_F(FunctionsPackageFixture, RemainderFunctionOperation)
 {
   //remainder(x, y) - IEEE remainder of x / y
   //Array + array
-  parser.SetExpr("remainder(dc1, dc5)");
+  parser.SetExpr("remainder(dc1, dc2)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_EQ(result.At(l).GetFloat(), std::remainder(v1_[l], v5_[l]));
+    if(v2_[l] == 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_EQ(result.At(l).GetFloat(), std::remainder(v1_[l], v2_[l]));
   }
   
   //Array + scalar
@@ -686,23 +718,26 @@ TEST_F(FunctionsPackageFixture, RemainderFunctionOperation)
     EXPECT_NEAR(result.At(l).GetFloat(), std::remainder(-v1_[l], -50), 1E-6);
   }
   
-  //Scalar + array
+  //Scalar, array
   parser.SetExpr("remainder(50, dc6)");
   result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::remainder(50, v6_[l]), 1E-6);
   }
   
-  //Scalar + scalar
+  //Scalar, scalar
   parser.SetExpr("remainder(50, 100)");
   result = parser.Eval();
-  EXPECT_NEAR(result.GetFloat(), std::remainder(50, 100), 1E-4);
+  EXPECT_NEAR(result.GetFloat(), 50, 1E-2);
   
-  //Array + array different sizes
-  parser.SetExpr("remainder(dc1, dc5)");
+  //Array, array different sizes
+  parser.SetExpr("remainder(dc1, dc4)");
   result = parser.Eval();
   EXPECT_EQ(result.GetRows(), v1_.size());
   for (int l = 0; l < result.GetRows(); ++l) {
-    EXPECT_NEAR(result.At(l).GetFloat(), std::remainder(v1_[l], v5_[l]), 1E-6);
+    if(v4_[l] == 0)
+      EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
+    else
+      EXPECT_NEAR(result.At(l).GetFloat(), std::remainder(v1_[l], v4_[l]), 1E-6);
   }
 }

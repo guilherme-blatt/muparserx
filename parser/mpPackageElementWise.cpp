@@ -92,11 +92,18 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   // Operator callbacks
   pParser->DefineInfixOprt(new OprtSignElementWise());
   pParser->DefineInfixOprt(new OprtSignPosElementWise());
+  pParser->DefineOprt(new OprtEQElementWise());
+  pParser->DefineOprt(new OprtNEQElementWise());
+  pParser->DefineOprt(new OprtLTElementWise());
+  pParser->DefineOprt(new OprtGTElementWise());
+  pParser->DefineOprt(new OprtLEElementWise());
+  pParser->DefineOprt(new OprtGEElementWise());
   pParser->DefineOprt(new OprtAddElementWise());
   pParser->DefineOprt(new OprtSubElementWise());
   pParser->DefineOprt(new OprtMulElementWise());
   pParser->DefineOprt(new OprtDivElementWise());
   pParser->DefineOprt(new OprtPowElementWise());
+  
   pParser->DefineOprt(new OprtLogicOrElementWise("||"));
   pParser->DefineOprt(new OprtLogicOrElementWise("OR"));
   pParser->DefineOprt(new OprtLogicAndElementWise("&&"));
