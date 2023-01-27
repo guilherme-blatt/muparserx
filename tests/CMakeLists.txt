@@ -8,10 +8,14 @@ FetchContent_MakeAvailable(GTest)
 
 if (GTest_FOUND OR gtest_POPULATED)
   set(TESTS_SRC
-      src/ElementWiseOperatorsTest.cpp)
+      src/ElementWiseOperatorsTest.cpp
+      src/ElementWiseLogicalOperatorsTest.cpp
+      src/ElementWiseLogicalOperatorsTest.cpp
+      src/ElementWiseFunctionsTest.cpp
+      src/MotecFunctions1.cpp)
   
   #add_executable(${PROJECT_NAME}_Tests ${TESTS_SRC})
-  add_executable(${PROJECT_NAME}_Tests src/ElementWiseOperatorsTest.cpp src/ElementWiseLogicalOperatorsTest.cpp src/ElementWiseLogicalOperatorsTest.cpp src/ElementWiseFunctionsTest.cpp)
+  add_executable(${PROJECT_NAME}_Tests ${TESTS_SRC} )
   
   #set_target_properties(${PROJECT_NAME}_Tests PROPERTIES
   #                      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
