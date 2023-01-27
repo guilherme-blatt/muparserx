@@ -38,8 +38,8 @@ endif(MSVC)
 ########################################################################
 file(GLOB MUPARSERX_SOURCES "${MUPARSERX_SOURCE_DIR}/*.cpp")
 
-file(GLOB_RECURSE MUPARSERX_SOURCES_RECURSIVE "${MUPARSERX_SOURCE_DIR}/*/*.cpp")
-list(APPEND MUPARSERX_SOURCES ${MUPARSERX_SOURCES_RECURSIVE})
+file(GLOB MUPARSERX_SOURCES_MOTEC "${MUPARSERX_SOURCE_DIR}/motec/*.cpp")
+list(APPEND MUPARSERX_SOURCES ${MUPARSERX_SOURCES_MOTEC})
 
 include_directories(${MUPARSERX_SOURCE_DIR})
 add_library(muparserx ${MUPARSERX_SOURCES})
