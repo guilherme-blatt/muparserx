@@ -24,7 +24,7 @@ protected:
       v4_.push_back((double) i * i);
     }
     
-    v5_ = {1, -1, 0.5, 0.7, -0.5, -0.7};
+    v5_ = {1.2, -1.3, 2.5, 3.7, -4.5, -5.7};
     v6_ = {0.5, 0.7, -0.5, -0.7, 0.9};
     
     
@@ -64,6 +64,7 @@ protected:
     parser.DefineVar("dc4", mup::Variable(dc4_value));
     parser.DefineVar("dc5", mup::Variable(dc5_value));
     parser.DefineVar("dc6", mup::Variable(dc6_value));
+    mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
   std::vector<double> v1_, v2_, v3_, v4_, v5_, v6_;
@@ -75,23 +76,51 @@ protected:
   MotecFunctions1Fixture() : parser(mup::pck_ELEMENT_WISE) { }
 };
 
-
-TEST_F(MotecFunctions1Fixture, RandomVal)
+TEST_F(MotecFunctions1Fixture, MuparserxImportedCorrectly)
 {
   //Simple library example to make sure it is imported correctly
   mup::ParserX parserX(mup::pck_ELEMENT_WISE);
-  
-  mup::motecDefinition::add_motec_functions(&parserX, 100);
-  
-  parserX.SetExpr("rand_val()");
+  parserX.SetExpr("1 + 2");
+  mup::Value result = parserX.Eval();
+  EXPECT_EQ(result.GetInteger(), 3);
+}
+
+TEST_F(MotecFunctions1Fixture, RandomVal)
+{
+  parser.SetExpr("rand_val()");
   
   double random_results[5];
   
   for (int i = 0; i < 5; ++i) {
-    mup::Value result = parserX.Eval();
+    mup::Value result = parser.Eval();
     random_results[i] = result.GetFloat();
+    std::cout<<"Result " << i << ": "<< random_results[i] << std::endl;
     EXPECT_LE(random_results[i], 1);
     EXPECT_GE(random_results[i], 0);
   }
   //TEST IF ALL ARRAY VALUES ARE DIFFERENT FROM EACH OTHER
+}
+
+TEST_F(MotecFunctions1Fixture, Frac)
+{
+  mup::motecDefinition::add_motec_functions(&parser, 100);
+
+  //Frac(vector)
+  parser.SetExpr("frac(dc5)");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+      EXPECT_NEAR(result.At(l).GetFloat(), v5_[l] - trunc(v5_[l]), 1E-6);
+  }
+  
+  //Frac(scalar)
+  parser.SetExpr("frac(2.6)");
+  result = parser.Eval();
+  std::cout << "Result: " << result << std::endl;
+  EXPECT_NEAR(result.GetFloat(), 0.6, 1E-2);
+  
+  //Frac(-scalar)
+  parser.SetExpr("frac(-2.45)");
+  result = parser.Eval();
+  std::cout << "Result: " << result << std::endl;
+  EXPECT_NEAR(result.GetFloat(), -0.45, 1E-2);
 }

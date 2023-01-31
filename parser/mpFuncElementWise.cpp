@@ -48,6 +48,7 @@
 
 MUP_NAMESPACE_START
 
+
 #define MUP_UNARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                                                           \
     CLASS::CLASS()                                                                                                      \
     :ICallback(cmFUNC, _T(IDENT), 1)                                                                                    \
@@ -116,6 +117,7 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_ELEMENT_WISE(FunSqrtElementWise,  "sqrt",  std::sqrt,  "sqrt(x) - square root of x")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunCbrtElementWise,  "cbrt",  std::cbrt,  "cbrt(x) - cubic root of x")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunExpElementWise,   "exp",   std::exp,   "exp(x) - e to the power of x")
+    //MUP_UNARY_FUNC_ELEMENT_WISE(FunExp10ElementWise, "exp10", mup::exp10,   "exp10(x) - e to the power of x")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunAbsElementWise,   "abs",   std::fabs,  "abs(x) - absolute value of x")
 #undef MUP_UNARY_FUNC_ELEMENT_WISE
 
@@ -207,6 +209,8 @@ MUP_NAMESPACE_START
     MUP_BINARY_FUNC_ELEMENT_WISE(FunAtan2ElementWise, "atan2", std::atan2, "arcus tangens with quadrant fix")
     MUP_BINARY_FUNC_ELEMENT_WISE(FunFmodElementWise,  "fmod",  std::fmod,  "fmod(x, y) - floating point remainder of x / y")
     MUP_BINARY_FUNC_ELEMENT_WISE(FunRemainderElementWise,  "remainder",  std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunMaxElementWise,  "remainder",  std::max,  "max(x, y) - Returns the largest of x and y. If both are equivalent, x is returned.")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunMinElementWise,  "remainder",  std::min,  "min(x, y) - Returns the smallest of x and y. If both are equivalent, x is returned.")
 #undef MUP_BINARY_FUNC_ELEMENT_WISE
 
 MUP_NAMESPACE_END

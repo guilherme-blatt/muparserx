@@ -78,6 +78,7 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   //pParser->DefineFun(new FunLog2ElementWise());
   pParser->DefineFun(new FunLnElementWise());
   pParser->DefineFun(new FunExpElementWise());
+  //pParser->DefineFun(new FunExp10ElementWise());
   pParser->DefineFun(new FunSqrtElementWise());
   pParser->DefineFun(new FunCbrtElementWise());
   pParser->DefineFun(new FunAbsElementWise());

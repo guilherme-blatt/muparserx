@@ -37,6 +37,7 @@
 
 #include "mpICallback.h"
 
+
 /** \defgroup functions Function callback objects.
 
   This group lists the objects representing parser functions.
@@ -79,6 +80,7 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_ELEMENT_WISE_DEF(FunSqrtElementWise)
     MUP_UNARY_FUNC_ELEMENT_WISE_DEF(FunCbrtElementWise)
     MUP_UNARY_FUNC_ELEMENT_WISE_DEF(FunExpElementWise)
+    //MUP_UNARY_FUNC_ELEMENT_WISE_DEF(FunExp10ElementWise)
     MUP_UNARY_FUNC_ELEMENT_WISE_DEF(FunAbsElementWise)
 #undef MUP_UNARY_FUNC_ELEMENT_WISE_DEF
 
@@ -97,6 +99,8 @@ MUP_NAMESPACE_START
     MUP_BINARY_FUNC_ELEMENT_WISE_DEF(FunAtan2ElementWise)
     MUP_BINARY_FUNC_ELEMENT_WISE_DEF(FunFmodElementWise)
     MUP_BINARY_FUNC_ELEMENT_WISE_DEF(FunRemainderElementWise)
+    MUP_BINARY_FUNC_ELEMENT_WISE_DEF(FunMaxElementWise)
+    MUP_BINARY_FUNC_ELEMENT_WISE_DEF(FunMinElementWise)
 #undef MUP_BINARY_FUNC_ELEMENT_WISE_DEF
 
 }  // namespace mu
