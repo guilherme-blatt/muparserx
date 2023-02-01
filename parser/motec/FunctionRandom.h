@@ -32,7 +32,7 @@ public:
 class MotecInt : public ICallback
 {
 public:
-  MotecInt () :ICallback(cmFUNC, _T("int"), 1) {};
+  MotecInt () :ICallback(cmFUNC, _T("integer"), 1) {};
   
   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
   

@@ -57,6 +57,9 @@ protected:
     for (int l = 0; l < v6_.size(); ++l) {
       dc6_value->At(l) = v6_[l];
     }
+    
+    inf = new mup::Value(INFINITY);
+    nan = new mup::Value(NAN);
   
     parser.DefineVar("dc1", mup::Variable(dc1_value));
     parser.DefineVar("dc2", mup::Variable(dc2_value));
@@ -64,6 +67,8 @@ protected:
     parser.DefineVar("dc4", mup::Variable(dc4_value));
     parser.DefineVar("dc5", mup::Variable(dc5_value));
     parser.DefineVar("dc6", mup::Variable(dc6_value));
+    parser.DefineVar("inf", mup::Variable(inf));
+    parser.DefineVar("nan", mup::Variable(nan));
     mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
@@ -71,7 +76,7 @@ protected:
   
   mup::ParserX parser;
   
-  mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value;
+  mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value, *inf, *nan;
   
   MotecFunctions1Fixture() : parser(mup::pck_ELEMENT_WISE) { }
 };
@@ -103,13 +108,18 @@ TEST_F(MotecFunctions1Fixture, RandomVal)
 
 TEST_F(MotecFunctions1Fixture, Frac)
 {
-  mup::motecDefinition::add_motec_functions(&parser, 100);
-
   //Frac(vector)
   parser.SetExpr("frac(dc5)");
   mup::Value result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
       EXPECT_NEAR(result.At(l).GetFloat(), v5_[l] - trunc(v5_[l]), 1E-6);
+  }
+  
+  //Frac(-vector)
+  parser.SetExpr("frac(-dc5)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), -(v5_[l]) - trunc(-(v5_[l])), 1E-6);
   }
   
   //Frac(scalar)
@@ -124,3 +134,156 @@ TEST_F(MotecFunctions1Fixture, Frac)
   std::cout << "Result: " << result << std::endl;
   EXPECT_NEAR(result.GetFloat(), -0.45, 1E-2);
 }
+
+TEST_F(MotecFunctions1Fixture, Int)
+{
+  //Frac(vector)
+//  parser.SetExpr("int(dc5)");
+//  mup::Value result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    std::cout<<"Primeiro"<<std::endl;
+//    EXPECT_NEAR(result.At(l).GetFloat(), (int) v5_[l] , 1E-6);
+//  }
+  
+  //Frac(-vector)
+//  parser.SetExpr("int(-dc5)");
+//  result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    EXPECT_NEAR(result.At(l).GetFloat(), (int) -(v5_[l]) , 1E-6);
+//  }
+  
+  //Frac(scalar)
+  parser.SetExpr("integer(2.6)");
+  mup::Value result = parser.Eval();
+  std::cout << "Result: " << result << std::endl;
+  EXPECT_NEAR(result.GetFloat(), 2, 1E-2);
+//  EXPECT_TRUE(result.GetFloat());
+  //Frac(-scalar)
+//  parser.SetExpr("int(-2.45)");
+//  result = parser.Eval();
+//  std::cout << "Result: " << result << std::endl;
+//  EXPECT_NEAR(result.GetFloat(), -2, 1E-2);
+}
+
+TEST_F(MotecFunctions1Fixture, IsFinite)
+{
+  //IsFinite(vector)
+  parser.SetExpr("is_finite(dc5)");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_TRUE(result.At(l).GetFloat());
+  }
+  
+  //IsFinite(-vector)
+  parser.SetExpr("is_finite(-dc5)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_TRUE(result.At(l).GetFloat());
+  }
+  
+  //IsFinite(infinity)
+  parser.SetExpr("is_finite(inf)");
+  result = parser.Eval();
+  EXPECT_FALSE(result.GetFloat());
+  
+  //IsFinite(not a number)
+  parser.SetExpr("is_finite(nan)");
+  result = parser.Eval();
+  EXPECT_FALSE(result.GetFloat());
+}
+
+TEST_F(MotecFunctions1Fixture, sqr)
+{
+  //sqr(vector)
+  parser.SetExpr("sqr(dc5)");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), pow(v5_[l], 2), 1E-2);
+  }
+  
+  //sqr(-vector)
+  parser.SetExpr("sqr(-dc5)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), pow(-(v5_[l]), 2), 1E-2);
+  }
+  
+  //sqr(scalar)
+  parser.SetExpr("sqr(2.3)");
+  result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), 5.29, 1E-2);
+  
+  //sqr(-scalar)
+  parser.SetExpr("sqr(-5.8)");
+  result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), 33.64, 1E-2);
+}
+
+TEST_F(MotecFunctions1Fixture, max)
+{
+//  //sqr(vector, vector)
+//  parser.SetExpr("max(dc5, dc6)");
+//  mup::Value result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    EXPECT_NEAR(result.At(l).GetFloat(), std::max(v5_[l], v6_[l]), 1E-2);
+//  }
+//
+//  //sqr(-vector, vector)
+//  parser.SetExpr("max(-dc5, dc6)");
+//  result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    EXPECT_NEAR(result.At(l).GetFloat(), std::max(-(v5_[l]), v6_[l]), 1E-2);
+//  }
+  
+  //max(scalar, scalar)
+  parser.SetExpr("max(2.3, 5.29)");
+  mup::Value result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), 5.29, 1E-2);
+  
+//  //max(-scalar, -scalar)
+//  parser.SetExpr("max(-5.8, -3.1)");
+//  result = parser.Eval();
+//  EXPECT_NEAR(result.GetFloat(), 3.1, 1E-2);
+}
+
+TEST_F(MotecFunctions1Fixture, min)
+{
+//  //min(vector, vector)
+//  parser.SetExpr("min(dc5, dc6)");
+//  mup::Value result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    EXPECT_NEAR(result.At(l).GetFloat(), std::min(v5_[l], v6_[l]), 1E-2);
+//  }
+//
+//  //min(-vector, vector)
+//  parser.SetExpr("min(-dc5, dc6)");
+//  result = parser.Eval();
+//  for (int l = 0; l < result.GetRows(); ++l) {
+//    EXPECT_NEAR(result.At(l).GetFloat(), std::min(-(v5_[l]), v6_[l]), 1E-2);
+//  }
+  
+  //min(scalar, scalar)
+  parser.SetExpr("min(2.3,5.29)");
+  mup::Value result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), 2.3, 1E-2);
+
+//  //min(-scalar, -scalar)
+//  parser.SetExpr("min(-5.8, -3.1)");
+//  result = parser.Eval();
+//  EXPECT_NEAR(result.GetFloat(), -5.8, 1E-2);
+}
+
+TEST_F(MotecFunctions1Fixture, toDouble)
+{
+//  //to_double(scalar, scalar)
+//  parser.SetExpr("to_double(2.3,5.29)");
+//  mup::Value result = parser.Eval();
+//  EXPECT_NEAR(result.GetFloat(), 2.3, 1E-2);
+//
+//  //min(-scalar, -scalar)
+//  double num = -5.8;
+//  parser.SetExpr("to_double(-5.8)");
+//  result = parser.Eval();
+//  EXPECT_EQ(result.GetD(), typeid(num).name());
+}
+
