@@ -4,7 +4,7 @@
 #include <vector>
 #include <motec/MotecDefinition.h>
 
-class MotecFunctions1Fixture : public ::testing::Test {
+class MotecBasicFunctionsFixture : public ::testing::Test {
 
 protected:
   virtual void TearDown()
@@ -26,7 +26,6 @@ protected:
     
     v5_ = {1.2, -1.3, 2.5, 3.7, -4.5, -5.7};
     v6_ = {0.5, 0.7, -0.5, -0.7, 0.9};
-    
     
     dc1_value = new mup::Value(v1_.size(), 0);
     for (int l = 0; l < v1_.size(); ++l) {
@@ -69,6 +68,7 @@ protected:
     parser.DefineVar("dc6", mup::Variable(dc6_value));
     parser.DefineVar("inf", mup::Variable(inf));
     parser.DefineVar("nan", mup::Variable(nan));
+    
     mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
@@ -78,10 +78,10 @@ protected:
   
   mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value, *inf, *nan;
   
-  MotecFunctions1Fixture() : parser(mup::pck_ELEMENT_WISE) { }
+  MotecBasicFunctionsFixture() :parser(mup::pck_ELEMENT_WISE) { }
 };
 
-TEST_F(MotecFunctions1Fixture, MuparserxImportedCorrectly)
+TEST_F(MotecBasicFunctionsFixture, MuparserxImportedCorrectly)
 {
   //Simple library example to make sure it is imported correctly
   mup::ParserX parserX(mup::pck_ELEMENT_WISE);
@@ -90,7 +90,7 @@ TEST_F(MotecFunctions1Fixture, MuparserxImportedCorrectly)
   EXPECT_EQ(result.GetInteger(), 3);
 }
 
-TEST_F(MotecFunctions1Fixture, RandomVal)
+TEST_F(MotecBasicFunctionsFixture, RandomVal)
 {
   parser.SetExpr("rand_val()");
   
@@ -106,7 +106,7 @@ TEST_F(MotecFunctions1Fixture, RandomVal)
   //TEST IF ALL ARRAY VALUES ARE DIFFERENT FROM EACH OTHER
 }
 
-TEST_F(MotecFunctions1Fixture, Frac)
+TEST_F(MotecBasicFunctionsFixture, Frac)
 {
   //Frac(vector)
   parser.SetExpr("frac(dc5)");
@@ -125,47 +125,24 @@ TEST_F(MotecFunctions1Fixture, Frac)
   //Frac(scalar)
   parser.SetExpr("frac(2.6)");
   result = parser.Eval();
-  std::cout << "Result: " << result << std::endl;
   EXPECT_NEAR(result.GetFloat(), 0.6, 1E-2);
   
   //Frac(-scalar)
   parser.SetExpr("frac(-2.45)");
   result = parser.Eval();
-  std::cout << "Result: " << result << std::endl;
   EXPECT_NEAR(result.GetFloat(), -0.45, 1E-2);
 }
 
-TEST_F(MotecFunctions1Fixture, Int)
+TEST_F(MotecBasicFunctionsFixture, Int)
 {
-  //Frac(vector)
-//  parser.SetExpr("int(dc5)");
-//  mup::Value result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    std::cout<<"Primeiro"<<std::endl;
-//    EXPECT_NEAR(result.At(l).GetFloat(), (int) v5_[l] , 1E-6);
-//  }
-  
-  //Frac(-vector)
-//  parser.SetExpr("int(-dc5)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), (int) -(v5_[l]) , 1E-6);
-//  }
-  
   //Frac(scalar)
   parser.SetExpr("integer(2.6)");
   mup::Value result = parser.Eval();
   std::cout << "Result: " << result << std::endl;
   EXPECT_NEAR(result.GetFloat(), 2, 1E-2);
-//  EXPECT_TRUE(result.GetFloat());
-  //Frac(-scalar)
-//  parser.SetExpr("int(-2.45)");
-//  result = parser.Eval();
-//  std::cout << "Result: " << result << std::endl;
-//  EXPECT_NEAR(result.GetFloat(), -2, 1E-2);
 }
 
-TEST_F(MotecFunctions1Fixture, IsFinite)
+TEST_F(MotecBasicFunctionsFixture, IsFinite)
 {
   //IsFinite(vector)
   parser.SetExpr("is_finite(dc5)");
@@ -192,7 +169,7 @@ TEST_F(MotecFunctions1Fixture, IsFinite)
   EXPECT_FALSE(result.GetFloat());
 }
 
-TEST_F(MotecFunctions1Fixture, sqr)
+TEST_F(MotecBasicFunctionsFixture, sqr)
 {
   //sqr(vector)
   parser.SetExpr("sqr(dc5)");
@@ -219,71 +196,70 @@ TEST_F(MotecFunctions1Fixture, sqr)
   EXPECT_NEAR(result.GetFloat(), 33.64, 1E-2);
 }
 
-TEST_F(MotecFunctions1Fixture, max)
+TEST_F(MotecBasicFunctionsFixture, max)
 {
-//  //sqr(vector, vector)
-//  parser.SetExpr("max(dc5, dc6)");
-//  mup::Value result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::max(v5_[l], v6_[l]), 1E-2);
-//  }
-//
-//  //sqr(-vector, vector)
-//  parser.SetExpr("max(-dc5, dc6)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::max(-(v5_[l]), v6_[l]), 1E-2);
-//  }
+  //max(vector, vector)
+  parser.SetExpr("max(dc5, dc6)");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), std::max(v5_[l], v6_[l]), 1E-2);
+  }
+
+  //max(-vector, vector)
+  parser.SetExpr("max(-dc5, dc6)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), std::max(-(v5_[l]), v6_[l]), 1E-2);
+  }
   
   //max(scalar, scalar)
   parser.SetExpr("max(2.3, 5.29)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   EXPECT_NEAR(result.GetFloat(), 5.29, 1E-2);
   
-//  //max(-scalar, -scalar)
-//  parser.SetExpr("max(-5.8, -3.1)");
-//  result = parser.Eval();
-//  EXPECT_NEAR(result.GetFloat(), 3.1, 1E-2);
+  //max(-scalar, -scalar)
+  parser.SetExpr("max(-5.8, -3.1)");
+  result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), -3.1, 1E-2);
 }
 
-TEST_F(MotecFunctions1Fixture, min)
+TEST_F(MotecBasicFunctionsFixture, min)
 {
-//  //min(vector, vector)
-//  parser.SetExpr("min(dc5, dc6)");
-//  mup::Value result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::min(v5_[l], v6_[l]), 1E-2);
-//  }
-//
-//  //min(-vector, vector)
-//  parser.SetExpr("min(-dc5, dc6)");
-//  result = parser.Eval();
-//  for (int l = 0; l < result.GetRows(); ++l) {
-//    EXPECT_NEAR(result.At(l).GetFloat(), std::min(-(v5_[l]), v6_[l]), 1E-2);
-//  }
+  //min(vector, vector)
+  parser.SetExpr("min(dc5, dc6)");
+  mup::Value result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), std::min(v5_[l], v6_[l]), 1E-2);
+  }
+
+  //min(-vector, vector)
+  parser.SetExpr("min(-dc5, dc6)");
+  result = parser.Eval();
+  for (int l = 0; l < result.GetRows(); ++l) {
+    EXPECT_NEAR(result.At(l).GetFloat(), std::min(-(v5_[l]), v6_[l]), 1E-2);
+  }
   
   //min(scalar, scalar)
   parser.SetExpr("min(2.3,5.29)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   EXPECT_NEAR(result.GetFloat(), 2.3, 1E-2);
 
-//  //min(-scalar, -scalar)
-//  parser.SetExpr("min(-5.8, -3.1)");
-//  result = parser.Eval();
-//  EXPECT_NEAR(result.GetFloat(), -5.8, 1E-2);
+  //min(-scalar, -scalar)
+  parser.SetExpr("min(-5.8, -3.1)");
+  result = parser.Eval();
+  EXPECT_NEAR(result.GetFloat(), -5.8, 1E-2);
 }
 
-TEST_F(MotecFunctions1Fixture, toDouble)
+TEST_F(MotecBasicFunctionsFixture, toDouble)
 {
-//  //to_double(scalar, scalar)
-//  parser.SetExpr("to_double(2.3,5.29)");
-//  mup::Value result = parser.Eval();
-//  EXPECT_NEAR(result.GetFloat(), 2.3, 1E-2);
-//
-//  //min(-scalar, -scalar)
-//  double num = -5.8;
-//  parser.SetExpr("to_double(-5.8)");
-//  result = parser.Eval();
-//  EXPECT_EQ(result.GetD(), typeid(num).name());
+  //to_double(scalar, scalar)
+  parser.SetExpr("to_double(-1)");
+  mup::Value result = parser.Eval();
+
+  std::cout << "Input Type: " << typeid(-1).name() << std::endl;
+  std::cout << "Output Type: " << typeid(result.GetFloat()).name() << std::endl;
+  std::cout << "Output Value: " << result.GetFloat() << std::endl;
+  
+  EXPECT_EQ(typeid(result.GetFloat()), typeid((double) -1));
 }
 

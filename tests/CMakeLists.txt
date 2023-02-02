@@ -12,7 +12,7 @@ if (GTest_FOUND OR gtest_POPULATED)
       src/ElementWiseLogicalOperatorsTest.cpp
       src/ElementWiseLogicalOperatorsTest.cpp
       src/ElementWiseFunctionsTest.cpp
-      src/MotecFunctions1.cpp)
+      src/MotecBasicFunctionsTest.cpp)
   
   #add_executable(${PROJECT_NAME}_Tests ${TESTS_SRC})
   add_executable(${PROJECT_NAME}_Tests ${TESTS_SRC} )
