@@ -209,8 +209,8 @@ MUP_NAMESPACE_START
     MUP_BINARY_FUNC_ELEMENT_WISE(FunAtan2ElementWise, "atan2", std::atan2, "arcus tangens with quadrant fix")
     MUP_BINARY_FUNC_ELEMENT_WISE(FunFmodElementWise,  "fmod",  std::fmod,  "fmod(x, y) - floating point remainder of x / y")
     MUP_BINARY_FUNC_ELEMENT_WISE(FunRemainderElementWise,  "remainder",  std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunMaxElementWise,  "max",  std::fmax,  "max(x, y) - Returns the largest of x and y. If both are equivalent, x is returned.")
-    MUP_BINARY_FUNC_ELEMENT_WISE(FunMinElementWise,  "min",  std::fmin,  "min(x, y) - Returns the smallest of x and y. If both are equivalent, x is returned.")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunMaxElementWise,  "max",  std::max,  "max(x, y) - Returns the largest of x and y. If both are equivalent, x is returned.")
+    MUP_BINARY_FUNC_ELEMENT_WISE(FunMinElementWise,  "min",  std::min,  "min(x, y) - Returns the smallest of x and y. If both are equivalent, x is returned.")
 #undef MUP_BINARY_FUNC_ELEMENT_WISE
 
 MUP_NAMESPACE_END

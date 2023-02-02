@@ -89,6 +89,8 @@ void PackageElementWise::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunAtan2ElementWise());
   pParser->DefineFun(new FunFmodElementWise());
   pParser->DefineFun(new FunRemainderElementWise());
+  pParser->DefineFun(new FunMaxElementWise());
+  pParser->DefineFun(new FunMinElementWise());
 
   // Operator callbacks
   pParser->DefineInfixOprt(new OprtSignElementWise());

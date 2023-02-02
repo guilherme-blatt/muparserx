@@ -2,14 +2,14 @@
 // Created by Optimum G on 1/27/2023.
 //
 
-#include "FunctionRandom.h"
+#include "MotecBasicFunctions.h"
 //#include <time.h>
 
 MUP_NAMESPACE_START
 
 void RandValue::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 {
-  std::srand(time(0));
+  std::srand(time(NULL));
   double random = std::rand() / (double) RAND_MAX;
   
   *ret = random;
@@ -113,7 +113,7 @@ void MotecToDouble::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iA
     {                                                                                                               \
       if (!a1.At(i).IsNonComplexScalar())/* if the element from array of arg1 isn't a non-complex scalar*/          \
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));          \
-
+        
       rv.At(i) = (double) a1.At(i).GetFloat();
     }                                                                                                               \
     *ret = rv;                                                                                                      \
@@ -122,7 +122,7 @@ void MotecToDouble::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iA
   {/* Scalar */                                                                                                     \
     if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/                          \
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));               \
-
+      
     *ret = (double) arg1->GetFloat();
   }
 }

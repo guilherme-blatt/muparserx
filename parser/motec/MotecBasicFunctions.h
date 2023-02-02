@@ -2,8 +2,8 @@
 // Created by Optimum G on 1/27/2023.
 //
 
-#ifndef MUPARSERX_FUNCTIONRANDOM_H
-#define MUPARSERX_FUNCTIONRANDOM_H
+#ifndef MUPARSERX_MOTECBASICFUNCTIONS_H
+#define MUPARSERX_MUPARSERX_MOTECBASICFUNCTIONS_H
 
 #include "../mpICallback.h"
 #include "../mpParser.h"
@@ -121,6 +121,6 @@ public:
   }
 }; // class MotecToDouble
 
-#endif //MUPARSERX_FUNCTIONRANDOM_H
+#endif //MUPARSERX_MUPARSERX_MOTECBASICFUNCTIONS_H
 
 }//namespace end
