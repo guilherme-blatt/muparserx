@@ -7,11 +7,14 @@
 
 #include "../mpICallback.h"
 #include "../mpParser.h"
+#include <random>
 
 MUP_NAMESPACE_START
 
 class RandValue : public ICallback
 {
+  bool has_seed_been_defined_ = false;
+  
 public:
   RandValue () :ICallback(cmFUNC, _T("rand_val"), -1) {};
   

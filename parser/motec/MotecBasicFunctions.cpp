@@ -9,8 +9,13 @@ MUP_NAMESPACE_START
 
 void RandValue::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 {
-  std::srand(time(NULL));
-  double random = std::rand() / (double) RAND_MAX;
+//  if(!has_seed_been_defined_)
+//    std::srand(time(nullptr));
+//  has_seed_been_defined_ = true;
+//  double random = std::rand() / (double) RAND_MAX;
+  static std::mt19937 generator(time(nullptr));
+  std::uniform_real_distribution<double> distribution(0.0, 1.0);
+  double random = distribution(generator);
   
   *ret = random;
 }
@@ -30,7 +35,7 @@ void MotecInt::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
       if (!a1.At(i).IsNonComplexScalar())/* if the element from array of arg1 isn't a non-complex scalar*/          \
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));          \
                                                                                                                     \
-      rv.At(i) = a1.At(i).GetInteger();                                                                         \
+      rv.At(i) = (mup::float_type) ((int) a1.At(i).GetFloat());                                                                         \
     }                                                                                                               \
     *ret = rv;                                                                                                      \
   }                                                                                                                 \
@@ -39,7 +44,7 @@ void MotecInt::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
     if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/                          \
       throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));               \
                                                                                                                     \
-    *ret = arg1->GetInteger();                                                                                  \
+    *ret = (mup::float_type)((int) arg1->GetFloat());                                                                                  \
   }
 }
 
