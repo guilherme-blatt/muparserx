@@ -111,7 +111,7 @@ install(
 
 option(BUILD_EXAMPLES "enable building example applications" ON)
 if(BUILD_EXAMPLES)
-    add_executable(example sample/example.cpp sample/timer.cpp)
+    add_executable(example sample/example.cpp sample/timer.cpp parser/motec/MotecChooseFunction.cpp parser/motec/MotecChooseFunction.h)
     target_link_libraries(example muparserx)
 endif(BUILD_EXAMPLES)
 

@@ -8,6 +8,7 @@
 #include "../mpParser.h"
 
 #include "MotecBasicFunctions.h"
+#include "MotecChooseFunction.h"
 
 MUP_NAMESPACE_START
 
