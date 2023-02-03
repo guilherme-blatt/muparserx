@@ -2,6 +2,7 @@
 #include <mpParser.h>
 #include <mpValReader.h>
 #include <vector>
+#include <motec/MotecDefinition.h>
 
 class ChoosePackageFixture : public ::testing::Test {
 
@@ -47,6 +48,8 @@ protected:
     parser.DefineVar("dc2", mup::Variable(dc2_value));
     parser.DefineVar("dc3", mup::Variable(dc3_value));
     parser.DefineVar("dc4", mup::Variable(dc4_value));
+  
+    mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
   std::vector<double> v1_, v2_, v3_, v4_;
@@ -70,7 +73,24 @@ TEST_F(ChoosePackageFixture, MuparserxImportedCorrectly)
 
 TEST_F(ChoosePackageFixture, ChooseFunction)
 {
-  parser.SetExpr("choose(dc1, 2, 3)");
+  //Arg1 scalar, Arg2 vector, Arg3 scalar
+  parser.SetExpr("choose(1 OR 0, dc1, 3)");
   mup::Value result = parser.Eval();
-  EXPECT_EQ(result.GetFloat(), 2);
+  for (int l = 0; l < v1_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
+  }
+  
+  //Arg1 scalar, Arg2 vector, Arg3 vector
+  parser.SetExpr("choose(1 && 0, dc1, dc2)");
+  result = parser.Eval();
+  for (int l = 0; l < v2_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
+  }
+  
+  //Arg1 vector, Arg2 vector, Arg3 vector
+  parser.SetExpr("choose(dc1 >= 0, dc2, dc3)");
+  result = parser.Eval();
+  for (int l = 0; l < v2_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
+  }
 }
