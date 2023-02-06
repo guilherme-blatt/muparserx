@@ -17,7 +17,7 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 //  std::cout << "Arg2: " << arg2->GetFloat()<< std::endl;
 //  std::cout << "Arg3: " << arg3->GetFloat() << std::endl;
   
-  if (arg1->GetType()=='m' &&  arg2->GetType()=='m' && !arg3->IsNonComplexScalar()){
+  if (arg1->GetType()=='m' &&  arg2->GetType()=='m' && arg3->IsNonComplexScalar()){
     const matrix_type &a1 = arg1->GetArray(),
                       &a2 = arg2->GetArray();
     
@@ -42,7 +42,7 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
     *ret = rv;
   }
   
-  else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar() && !arg3->GetType()=='m'){
+  else if (arg1->GetType()=='m' && arg2->IsNonComplexScalar() && arg3->GetType()=='m'){
     const matrix_type &a1 = arg1->GetArray(),
         &a3 = arg3->GetArray();
   
@@ -67,7 +67,7 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
     *ret = rv;
   }
 
-  else if (arg1->GetType()=='m' && arg2->GetType()=='m' && !arg3->GetType()=='m'){
+  else if (arg1->GetType()=='m' && arg2->GetType()=='m' && arg3->GetType()=='m'){
     const matrix_type &a1 = arg1->GetArray(),
         &a2 = arg2->GetArray(),
         &a3 = arg3->GetArray();

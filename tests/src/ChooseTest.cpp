@@ -73,6 +73,8 @@ TEST_F(ChoosePackageFixture, MuparserxImportedCorrectly)
 
 TEST_F(ChoosePackageFixture, ChooseFunction)
 {
+    mup::Value result;
+
 //  //Arg1 scalar, Arg2 vector, Arg3 scalar
 //  parser.SetExpr("choose(1 OR 0, dc1, 3)");
 //  mup::Value result = parser.Eval();
@@ -87,16 +89,16 @@ TEST_F(ChoosePackageFixture, ChooseFunction)
 //    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
 //  }
 //
-//  //Arg1 vector, Arg2 vector, Arg3 vector
-//  parser.SetExpr("choose(dc1 >= 0, dc2, dc3)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v2_.size(); l++) {
-//    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
-//  }
+  //Arg1 vector, Arg2 vector, Arg3 vector
+  parser.SetExpr("choose(dc1 >= 0, dc2, dc3)");
+  result = parser.Eval();
+  for (int l = 0; l < v2_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
+  }
   
   parser.SetExpr("choose(dc1 >= 0, invalid(), dc3)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < v2_.size(); l++) {
-    EXPECT_EQ(result.At(l).GetFloat(), NAN);
+    EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
   }
 }
