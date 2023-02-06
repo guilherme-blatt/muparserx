@@ -124,6 +124,24 @@ public:
   }
 }; // class MotecToDouble
 
+class MotecInvalid : public ICallback
+{
+public:
+  MotecInvalid () :ICallback(cmFUNC, _T("invalid"), 0) {};
+  
+  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+  
+  virtual const char_type* GetDesc() const override
+  {
+    return _T("parserid() - muParserX version information");
+  }
+  
+  virtual IToken* Clone() const override
+  {
+    return new MotecInvalid(*this);
+  }
+}; // class MotecToDouble
+
 #endif //MUPARSERX_MUPARSERX_MOTECBASICFUNCTIONS_H
 
 }//namespace end

@@ -156,6 +156,10 @@ void MotecFrac::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
   }
 }
 
+void MotecInvalid::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArg){
+  *ret = (float_type) NAN;
+}
+
 
 
 }//Namespace

@@ -98,9 +98,9 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
   }
 
   else{
-    /* Arg1 scalar */                                                                                                     \
-    if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/                          \
-      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));               \
+    /* Arg1 scalar */
+    if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/
+      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
     
     if (arg1->GetFloat() != 0)
       *ret = arg2->GetType() == 'm' ? arg2->GetArray() : arg2->GetFloat();
