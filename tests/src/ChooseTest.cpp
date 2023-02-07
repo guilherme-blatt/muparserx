@@ -75,20 +75,20 @@ TEST_F(ChoosePackageFixture, ChooseFunction)
 {
     mup::Value result;
 
-//  //Arg1 scalar, Arg2 vector, Arg3 scalar
-//  parser.SetExpr("choose(1 OR 0, dc1, 3)");
-//  mup::Value result = parser.Eval();
-//  for (int l = 0; l < v1_.size(); l++) {
-//    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
-//  }
-//
-//  //Arg1 scalar, Arg2 vector, Arg3 vector
-//  parser.SetExpr("choose(1 && 0, dc1, dc2)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v2_.size(); l++) {
-//    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
-//  }
-//
+  //Arg1 scalar, Arg2 vector, Arg3 scalar
+  parser.SetExpr("choose(1 OR 0, dc1, 3)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
+  }
+ 
+  //Arg1 scalar, Arg2 vector, Arg3 vector
+  parser.SetExpr("choose(1 && 0, dc1, dc2)");
+  result = parser.Eval();
+  for (int l = 0; l < v2_.size(); l++) {
+    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
+  }
+
   //Arg1 vector, Arg2 vector, Arg3 vector
   parser.SetExpr("choose(dc1 >= 0, dc2, dc3)");
   result = parser.Eval();
