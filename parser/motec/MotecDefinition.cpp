@@ -15,6 +15,7 @@ void motecDefinition::add_motec_functions(mup::ParserX* parser, int frequency)
   parser->DefineFun(new MotecSquare());
   parser->DefineFun(new MotecToDouble());
   parser->DefineFun(new MotecInvalid());
+  parser->DefineFun(new MotecSgn());
   parser->DefineFun(new Choose());
 }
 

@@ -26,6 +26,7 @@ protected:
     
     v5_ = {1.2, -1.3, 2.5, 3.7, -4.5, -5.7};
     v6_ = {0.5, 0.7, -0.5, -0.7, 0.9};
+    v7_ = {1, -1, 1, 1, -1, -1};
     
     dc1_value = new mup::Value(v1_.size(), 0);
     for (int l = 0; l < v1_.size(); ++l) {
@@ -56,6 +57,11 @@ protected:
     for (int l = 0; l < v6_.size(); ++l) {
       dc6_value->At(l) = v6_[l];
     }
+  
+    dc7_value = new mup::Value(v7_.size(), 0);
+    for (int l = 0; l < v7_.size(); ++l) {
+      dc7_value->At(l) = v7_[l];
+    }
     
     inf = new mup::Value(INFINITY);
     nan = new mup::Value(NAN);
@@ -66,17 +72,18 @@ protected:
     parser.DefineVar("dc4", mup::Variable(dc4_value));
     parser.DefineVar("dc5", mup::Variable(dc5_value));
     parser.DefineVar("dc6", mup::Variable(dc6_value));
+    parser.DefineVar("dc7", mup::Variable(dc7_value));
     parser.DefineVar("inf", mup::Variable(inf));
     parser.DefineVar("nan", mup::Variable(nan));
     
     mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
-  std::vector<double> v1_, v2_, v3_, v4_, v5_, v6_;
+  std::vector<double> v1_, v2_, v3_, v4_, v5_, v6_, v7_;
   
   mup::ParserX parser;
   
-  mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value, *inf, *nan;
+  mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value, *dc7_value, *inf, *nan;
   
   mup::Value result;
   
@@ -274,7 +281,7 @@ TEST_F(MotecBasicFunctionsFixture, round)
     EXPECT_EQ(result.At(l).GetFloat(), round(v5_[l]));
   
   //round(scalar)
-  parser.SetExpr("round(3.665)");
+  parser.SetExpr("round(3.5)");
   result = parser.Eval();
   EXPECT_EQ(result.GetFloat(), 4);
 }
@@ -306,6 +313,29 @@ TEST_F(MotecBasicFunctionsFixture, roundUp)
   result = parser.Eval();
   EXPECT_EQ(result.GetFloat(), 4);
 }
+
+TEST_F(MotecBasicFunctionsFixture, sgn)
+{
+  parser.SetExpr("sgn(1.1)");
+  result = parser.Eval();
+  
+  parser.SetExpr("sgn(1)");
+  result = parser.Eval();
+  
+  //round(vector)
+  parser.SetExpr("sgn(dc5)");
+  result = parser.Eval();
+  for(int l=0; l<result.GetRows(); l++)
+    EXPECT_EQ(result.At(l).GetFloat(), v7_[l]);
+  
+  //round(scalar)
+  parser.SetExpr("sgn(0)");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 0);
+}
+
+
+
 
 
 

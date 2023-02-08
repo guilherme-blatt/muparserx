@@ -21,20 +21,17 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
   if(arg1->GetType() == 'm'){
     const matrix_type &a1 = arg1->GetArray();
   
-//    if(arg2->GetType() == 'm' && arg3->GetType() == 'm') {
-//      int size = a1.GetRows() < arg2->GetRows() ? a1.GetRows() : arg2->GetRows();
-//      size = size < arg3->GetRows() ? size : arg2->GetRows();
-//    }
-//    else if (arg2->GetType() == 'm')
-//      int size = a1.GetRows() < arg2->GetRows() ? a1.GetRows() : arg2->GetRows();
-//
-//    else if(arg3->GetType() == 'm')
-//      int size = a1.GetRows() < arg3->GetRows() ? a1.GetRows() : arg3->GetRows();
-//
-//    else
-      matrix_type  rv(a1.GetRows());
+    int size = a1.GetRows();
     
-    for(int i=0; i<a1.GetRows(); i++){
+    if(arg2->GetType() == 'm')
+      size = std::min(size, arg2->GetRows());
+    
+    if(arg3->GetType() == 'm')
+      size = std::min(size, arg3->GetRows());
+    
+    matrix_type  rv(size);
+    
+    for(int i=0; i<size; i++){
       if (!a1.At(i).IsNonComplexScalar())
         throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
 
