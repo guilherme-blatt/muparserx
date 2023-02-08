@@ -140,7 +140,61 @@ public:
   {
     return new MotecInvalid(*this);
   }
-}; // class MotecToDouble
+}; // class MotecInvalid
+
+class MotecRound : public ICallback
+{
+public:
+  MotecRound () :ICallback(cmFUNC, _T("round"), 1) {};
+  
+  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+  
+  virtual const char_type* GetDesc() const override
+  {
+    return _T("parserid() - muParserX version information");
+  }
+  
+  virtual IToken* Clone() const override
+  {
+    return new MotecRound(*this);
+  }
+}; // class MotecRound
+
+class MotecRoundDown : public ICallback
+{
+public:
+  MotecRoundDown () :ICallback(cmFUNC, _T("round_down"), 1) {};
+  
+  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+  
+  virtual const char_type* GetDesc() const override
+  {
+    return _T("parserid() - muParserX version information");
+  }
+  
+  virtual IToken* Clone() const override
+  {
+    return new MotecRoundDown(*this);
+  }
+}; // class MotecRoundDown
+
+class MotecRoundUp : public ICallback
+{
+public:
+  MotecRoundUp () :ICallback(cmFUNC, _T("round_up"), 1) {};
+  
+  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+  
+  virtual const char_type* GetDesc() const override
+  {
+    return _T("parserid() - muParserX version information");
+  }
+  
+  virtual IToken* Clone() const override
+  {
+    return new MotecRoundUp(*this);
+  }
+}; // class MotecRoundUp
 
 #endif //MUPARSERX_MUPARSERX_MOTECBASICFUNCTIONS_H
 

@@ -119,6 +119,9 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_ELEMENT_WISE(FunExpElementWise,   "exp",   std::exp,   "exp(x) - e to the power of x")
     //MUP_UNARY_FUNC_ELEMENT_WISE(FunExp10ElementWise, "exp10", std::pow,   "exp10(x) - e to the power of x")
     MUP_UNARY_FUNC_ELEMENT_WISE(FunAbsElementWise,   "abs",   std::fabs,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunRoundElementWise,   "round",   std::round,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunRoundDownElementWise,   "round_down",   floor,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC_ELEMENT_WISE(FunRoundUpElementWise,   "round_up",   ceil,  "abs(x) - absolute value of x")
 #undef MUP_UNARY_FUNC_ELEMENT_WISE
 
 #define MUP_BINARY_FUNC_ELEMENT_WISE(CLASS, IDENT, FUNC, DESC)                                                          \

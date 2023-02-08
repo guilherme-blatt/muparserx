@@ -20,7 +20,19 @@ void Choose::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 
   if(arg1->GetType() == 'm'){
     const matrix_type &a1 = arg1->GetArray();
-    matrix_type  rv(a1.GetRows());
+  
+//    if(arg2->GetType() == 'm' && arg3->GetType() == 'm') {
+//      int size = a1.GetRows() < arg2->GetRows() ? a1.GetRows() : arg2->GetRows();
+//      size = size < arg3->GetRows() ? size : arg2->GetRows();
+//    }
+//    else if (arg2->GetType() == 'm')
+//      int size = a1.GetRows() < arg2->GetRows() ? a1.GetRows() : arg2->GetRows();
+//
+//    else if(arg3->GetType() == 'm')
+//      int size = a1.GetRows() < arg3->GetRows() ? a1.GetRows() : arg3->GetRows();
+//
+//    else
+      matrix_type  rv(a1.GetRows());
     
     for(int i=0; i<a1.GetRows(); i++){
       if (!a1.At(i).IsNonComplexScalar())

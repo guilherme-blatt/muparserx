@@ -78,6 +78,8 @@ protected:
   
   mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value, *dc5_value, *dc6_value, *inf, *nan;
   
+  mup::Value result;
+  
   MotecBasicFunctionsFixture() :parser(mup::pck_ELEMENT_WISE) { }
 };
 
@@ -86,7 +88,7 @@ TEST_F(MotecBasicFunctionsFixture, MuparserxImportedCorrectly)
   //Simple library example to make sure it is imported correctly
   mup::ParserX parserX(mup::pck_ELEMENT_WISE);
   parserX.SetExpr("1 + 2");
-  mup::Value result = parserX.Eval();
+  result = parserX.Eval();
   EXPECT_EQ(result.GetInteger(), 3);
 }
 
@@ -97,7 +99,7 @@ TEST_F(MotecBasicFunctionsFixture, RandomVal)
   double random_results[5];
   
   for (int i = 0; i < 5; ++i) {
-    mup::Value result = parser.Eval();
+    result = parser.Eval();
     random_results[i] = result.GetFloat();
     std::cout<<"Result " << i << ": "<< random_results[i] << std::endl;
     EXPECT_LE(random_results[i], 1);
@@ -110,7 +112,7 @@ TEST_F(MotecBasicFunctionsFixture, Frac)
 {
   //Frac(vector)
   parser.SetExpr("frac(dc5)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
       EXPECT_NEAR(result.At(l).GetFloat(), v5_[l] - trunc(v5_[l]), 1E-6);
   }
@@ -137,7 +139,7 @@ TEST_F(MotecBasicFunctionsFixture, Int)
 {
   //Frac(scalar)
   parser.SetExpr("integer(2.6)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   std::cout << "Result: " << result << std::endl;
   EXPECT_NEAR(result.GetFloat(), 2, 1E-2);
 }
@@ -146,7 +148,7 @@ TEST_F(MotecBasicFunctionsFixture, IsFinite)
 {
   //IsFinite(vector)
   parser.SetExpr("is_finite(dc5)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_TRUE(result.At(l).GetFloat());
   }
@@ -173,7 +175,7 @@ TEST_F(MotecBasicFunctionsFixture, sqr)
 {
   //sqr(vector)
   parser.SetExpr("sqr(dc5)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), pow(v5_[l], 2), 1E-2);
   }
@@ -200,7 +202,7 @@ TEST_F(MotecBasicFunctionsFixture, max)
 {
   //max(vector, vector)
   parser.SetExpr("max(dc5, dc6)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::max(v5_[l], v6_[l]), 1E-2);
   }
@@ -227,7 +229,7 @@ TEST_F(MotecBasicFunctionsFixture, min)
 {
   //min(vector, vector)
   parser.SetExpr("min(dc5, dc6)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
   for (int l = 0; l < result.GetRows(); ++l) {
     EXPECT_NEAR(result.At(l).GetFloat(), std::min(v5_[l], v6_[l]), 1E-2);
   }
@@ -254,7 +256,7 @@ TEST_F(MotecBasicFunctionsFixture, toDouble)
 {
   //to_double(scalar, scalar)
   parser.SetExpr("to_double(-1)");
-  mup::Value result = parser.Eval();
+  result = parser.Eval();
 
   std::cout << "Input Type: " << typeid(-1).name() << std::endl;
   std::cout << "Output Type: " << typeid(result.GetFloat()).name() << std::endl;
@@ -262,4 +264,52 @@ TEST_F(MotecBasicFunctionsFixture, toDouble)
   
   EXPECT_EQ(typeid(result.GetFloat()), typeid((double) -1));
 }
+
+TEST_F(MotecBasicFunctionsFixture, round)
+{
+  //round(vector)
+  parser.SetExpr("round(dc5)");
+  result = parser.Eval();
+  for(int l=0; l<result.GetRows(); l++)
+    EXPECT_EQ(result.At(l).GetFloat(), round(v5_[l]));
+  
+  //round(scalar)
+  parser.SetExpr("round(3.665)");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 4);
+}
+
+TEST_F(MotecBasicFunctionsFixture, roundDown)
+{
+  //round(vector)
+  parser.SetExpr("round_down(dc5)");
+  result = parser.Eval();
+  for(int l=0; l<result.GetRows(); l++)
+    EXPECT_EQ(result.At(l).GetFloat(), floor(v5_[l]));
+  
+  //round(scalar)
+  parser.SetExpr("round_down(3.9)");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 3);
+}
+
+TEST_F(MotecBasicFunctionsFixture, roundUp)
+{
+  //round(vector)
+  parser.SetExpr("round_up(dc5)");
+  result = parser.Eval();
+  for(int l=0; l<result.GetRows(); l++)
+    EXPECT_EQ(result.At(l).GetFloat(), ceil(v5_[l]));
+  
+  //round(scalar)
+  parser.SetExpr("round_up(3.165)");
+  result = parser.Eval();
+  EXPECT_EQ(result.GetFloat(), 4);
+}
+
+
+
+
+
+
 
