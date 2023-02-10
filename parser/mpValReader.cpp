@@ -82,7 +82,7 @@ bool DblValReader::IsValue(const char_type* a_szExpr, int& a_iPos, Value& a_Val)
   if(fVal - ((int)fVal) == 0) {
     for (int i = initial_pos; i < a_iPos; ++i) {
       if (a_szExpr[i] == '.')
-        fVal += FLT_EPSILON;
+        fVal += DBL_EPSILON;
     }
   }
   

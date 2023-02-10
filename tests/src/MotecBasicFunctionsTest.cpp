@@ -316,7 +316,7 @@ TEST_F(MotecBasicFunctionsFixture, roundUp)
 
 TEST_F(MotecBasicFunctionsFixture, sgn)
 {
-  parser.SetExpr("sgn(1.1)");
+  parser.SetExpr("sgn(1.0)");
   result = parser.Eval();
   
   parser.SetExpr("sgn(1)");
