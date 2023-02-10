@@ -58,6 +58,7 @@ bool DblValReader::IsValue(const char_type* a_szExpr, int& a_iPos, Value& a_Val)
 	stringstream_type stream(a_szExpr + a_iPos);
 	float_type fVal(0);
 	std::streamoff iEnd(0);
+  int initial_pos = a_iPos;
 
 	stream >> fVal;
 
@@ -77,7 +78,14 @@ bool DblValReader::IsValue(const char_type* a_szExpr, int& a_iPos, Value& a_Val)
 		assert(iEnd > 0);
 		a_iPos += (int)iEnd;
 	}
-
+  
+  if(fVal - ((int)fVal) == 0) {
+    for (int i = initial_pos; i < a_iPos; ++i) {
+      if (a_szExpr[i] == '.')
+        fVal += FLT_EPSILON;
+    }
+  }
+  
 	// Finally i have to check if the next sign is the "i" for a imaginary unit
 	// if so this is an imaginary value
 	if (a_szExpr[a_iPos] == 'i')
