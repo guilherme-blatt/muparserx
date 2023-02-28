@@ -14,7 +14,7 @@ class Smooth : public ICallback
 {
   int frequency_;
 public:
-  Smooth (int frequency) :ICallback(cmFUNC, _T("smooth"), 3) {frequency_ = frequency;};
+  Smooth (int frequency) :ICallback(cmFUNC, _T("smooth"), 2) {frequency_ = frequency;};
   
   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
   

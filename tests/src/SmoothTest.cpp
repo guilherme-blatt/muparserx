@@ -14,15 +14,17 @@ protected:
   
   virtual void SetUp()
   {
-    for (size_t i = 0; i < 5; i++) {
-      v1_.push_back((double) i + 1);
-      v2_.push_back((double) i * 2);
-    }
+//    for (size_t i = 0; i < 5; i++) {
+//      v1_.push_back((double) i + 1);
+//      v2_.push_back((double) i * 2);
+//    }
     
     for (size_t i = 0; i < 10; i++) {
       v3_.push_back((double) i * 5);
       v4_.push_back((double) i * i);
     }
+    v1_ = {1,1,1,0,0,1};
+    v2_ = {1, 1, 0.66, 0.33, 0.33, 0.33};
     
     dc1_value = new mup::Value(v1_.size(), 0);
     for (int l = 0; l < v1_.size(); ++l) {
@@ -76,10 +78,10 @@ TEST_F(SmoothPackageFixture, SmoothFunction)
   mup::Value result;
 
   //
-  parser.SetExpr("smooth(dc1, 3)");
+  parser.SetExpr("smooth(dc1, 5)");
   result = parser.Eval();
   for (int l = 0; l < v1_.size(); l++) {
-    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
+    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-2);
   }
  
 //  //Arg1 scalar, Arg2 vector, Arg3 vector

@@ -13,60 +13,61 @@ void Smooth::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
                *arg2 = a_pArg[1].Get();
 
 
-  if(arg1->GetType() == 'm'){
-    const matrix_type &a1 = arg1->GetArray();
+  if(arg1->GetType() == 'm') {
+    const matrix_type& a1 = arg1->GetArray();
   
     int size = a1.GetRows();
-    
-    if(arg2->GetType() == 'i'){
+  
+    if(arg2->GetType() == 'i') {
       int a2 = arg2->GetInteger();
       std::cout << "Integer: sample points" << std::endl;
-  
-      matrix_type  rv(size);
     
-      for(int i=0; i<size; i++){
-        if (!a1.At(i).IsNonComplexScalar())
-          throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
-  
-        if (i == 0){
-          for (int l=0; l<a2; l++) {
-            rv.At(i) += a1.At(i+l);
-          }
-          rv.At(i) = (float_type )rv.At(i)/a2;
+      matrix_type rv(size);
+    
+      if(a2 <= 1) {
+        for(int i = 0; i < size; i++) {
+          rv.At(i) = a1.At(i);
         }
-        
-        if(i <= a2){
-          for (int l=a2; l!=0; l--) {
-            rv.At(i) += a1.At(i+l);
-          }
-          for (int l=0; l<a2; l++) {
-            rv.At(i) += a1.At(i+l);
-          }
-          rv.At(i) = (float_type) rv.At(i) / ((a2*2)+1);
-        }
-//        else(a1.At(i).GetFloat() != 0) {
-//          rv.At(i) = arg2->GetType() == 'm' ? arg2->GetArray().At(i) : arg2->GetFloat();
-//        }
-//        else{
-//          rv.At(i) = arg3->GetType() == 'm' ? arg3->GetArray().At(i) : arg3->GetFloat();
-//        }
       }
-      *ret = rv;
-  }
-
-//  else{
-//    /* Arg1 scalar */
-//    if (!arg1->IsNonComplexScalar())/* if the element of arg1 isn't a non-complex scalar*/
-//      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
-//  }
-}
     
-    if(arg2->GetType() == 'f')
+      if(a2 % 2 != 0) {
+        for (int i = 0; i < size; i++) {
+          if(!a1.At(i).IsNonComplexScalar())
+            throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+        
+          if(i == 0) {
+            int n = 0;
+            for(int l = i; l < (a2 +1)/2; l ++){
+              rv.At(i) = rv.At(i).GetFloat() + a1.At(l).GetFloat();
+              n++;
+            }
+            rv.At(i) = rv.At(i).GetFloat() / (float_type) n;
+          }
+          
+          if(i == size-1){
+            int n = 0;
+            for(int l = i; l > ; l--){
+              rv.At(i) = rv.At(i).GetFloat() + a1.At(l).GetFloat();
+              n++;
+            }
+            rv.At(i) = rv.At(i).GetFloat() / (float_type) n;
+          }
+//
+//          for (int l = i; l < a2; l++) {
+//            rv.At(i) = rv.At(i).GetFloat() + a1.At(l).GetFloat();
+//          }
+//          rv.At(i) = rv.At(i).GetFloat() / (float_type) a2;
+        }
+        *ret = rv;
+      }
+    }
+  
+    if (arg2->GetType() == 'f')
       std::cout << "Float: time interval in seconds" << std::endl;
-    
+
 //    if(arg3->GetType() == 'm')
 //      size = std::min(size, arg3->GetRows());
-    
+
 //    matrix_type  rv(size);
 //
 //    for(int i=0; i<size; i++){
@@ -93,5 +94,6 @@ void Smooth::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 //      throw ParserError( ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), arg1->GetType(), 'f', 1));
 //
 //  }
+  }
 }
 }//Namespace
