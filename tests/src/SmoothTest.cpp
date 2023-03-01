@@ -19,12 +19,15 @@ protected:
 //      v2_.push_back((double) i * 2);
 //    }
     
-    for (size_t i = 0; i < 10; i++) {
-      v3_.push_back((double) i * 5);
-      v4_.push_back((double) i * i);
-    }
+//    for (size_t i = 0; i < 10; i++) {
+//      v3_.push_back((double) i * 5);
+//      v4_.push_back((double) i * i);
+//    }
     v1_ = {1,1,1,0,0,1};
-    v2_ = {1, 1, 0.66, 0.33, 0.33, 0.33};
+    v2_ = {1, 1, 0.66, 0.33, 0.33, 0.5};
+    v3_ = {1, 0.75, 0.6, 0.6, 0.5, 0.33};
+    v4_ = {0.75, 0.6, 0.66, 0.66, 0.6, 0.5};
+    v5_ = {0.6, 0.66, 0.66, 0.66, 0.66, 0.6};
     
     dc1_value = new mup::Value(v1_.size(), 0);
     for (int l = 0; l < v1_.size(); ++l) {
@@ -54,11 +57,13 @@ protected:
     mup::motecDefinition::add_motec_functions(&parser, 100);
   }
   
-  std::vector<double> v1_, v2_, v3_, v4_;
+  std::vector<double> v1_, v2_, v3_, v4_, v5_;
   
   mup::ParserX parser;
   
   mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value;
+  mup::Value result;
+  
   
   SmoothPackageFixture() :parser(mup::pck_ELEMENT_WISE) { }
 };
@@ -75,32 +80,34 @@ TEST_F(SmoothPackageFixture, MuparserxImportedCorrectly)
 
 TEST_F(SmoothPackageFixture, SmoothFunction)
 {
-  mup::Value result;
-
-  //
+    //
+  parser.SetExpr("smooth(dc1, 3)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-2);
+  }
+  
   parser.SetExpr("smooth(dc1, 5)");
   result = parser.Eval();
   for (int l = 0; l < v1_.size(); l++) {
-    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-2);
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v3_[l], 1E-2);
   }
- 
-//  //Arg1 scalar, Arg2 vector, Arg3 vector
-//  parser.SetExpr("smooth(1 && 0, dc1, dc2)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v2_.size(); l++) {
-//    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
-//  }
-//
-//  //Arg1 vector, Arg2 vector, Arg3 vector
-//  parser.SetExpr("smooth(dc1 >= 0, dc2, dc3)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v2_.size(); l++) {
-//    EXPECT_EQ(result.At(l).GetFloat(), v2_[l]);
-//  }
-//
-//  parser.SetExpr("smooth(dc1 >= 0, invalid(), dc3)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v2_.size(); l++) {
-//    EXPECT_TRUE(std::isnan(result.At(l).GetFloat()));
-//  }
+  
+  parser.SetExpr("smooth(dc1, 7)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v4_[l], 1E-2);
+  }
+  
+  parser.SetExpr("smooth(dc1, 9)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v5_[l], 1E-2);
+  }
+  
+  
 }
