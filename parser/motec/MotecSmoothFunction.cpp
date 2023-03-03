@@ -28,9 +28,10 @@ void Smooth::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
         for(int i = 0; i < size; i++) {
           rv.At(i) = a1.At(i);
         }
+        *ret = rv;
       }
     
-      if(a2 % 2 != 0) {
+      else if(a2 % 2 != 0) {
         for (int i = 0; i < size; i++) {
           if(!a1.At(i).IsNonComplexScalar())
             throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
@@ -47,10 +48,28 @@ void Smooth::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
         }
         *ret = rv;
       }
+    
+      else {
+        for (int i = 0; i < size; i++) {
+          if(!a1.At(i).IsNonComplexScalar())
+            throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(i).GetType(), 'f', 1));
+      
+          int windows_size = a2 / 2;
+          int samples_count = 0;
+          for (int j = i - windows_size; j <= i + windows_size - 1; j++ ){
+            if (j >= 0 && j < size){
+              samples_count ++;
+              rv.At(i) = rv.At(i).GetFloat() + a1.At(j).GetFloat();
+            }
+          }
+          rv.At(i) = rv.At(i).GetFloat() / (float_type) samples_count;
+        }
+        *ret = rv;
+      }
     }
-  
-    if (arg2->GetType() == 'f')
-      std::cout << "Float: time interval in seconds" << std::endl;
+    
+  if (arg2->GetType() == 'f')
+    std::cout << "Float: time interval in seconds" << std::endl;
     
   }
 }
