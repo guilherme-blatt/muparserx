@@ -23,7 +23,7 @@ protected:
 //      v3_.push_back((double) i * 5);
 //      v4_.push_back((double) i * i);
 //    }
-    v1_ = {1,1,1,0,0,0};
+    v1_ = {1,1,1,0,0,1};
     v2_ = {1, 1, 0.66, 0.33, 0.33, 0.5};
     v3_ = {1, 0.75, 0.6, 0.6, 0.5, 0.33};
     v4_ = {0.75, 0.6, 0.66, 0.66, 0.6, 0.5};
@@ -81,14 +81,14 @@ TEST_F(SmoothPackageFixture, MuparserxImportedCorrectly)
 
 TEST_F(SmoothPackageFixture, SmoothFunction)
 {
-//    //
+
 //  parser.SetExpr("smooth(dc1, 1)");
 //  result = parser.Eval();
 //  for (int l = 0; l < v1_.size(); l++) {
 //    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
 //    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
 //  }
-//
+
 //  parser.SetExpr("smooth(dc1, 3)");
 //  result = parser.Eval();
 //  for (int l = 0; l < v1_.size(); l++) {
@@ -109,13 +109,12 @@ TEST_F(SmoothPackageFixture, SmoothFunction)
 //    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
 //    EXPECT_NEAR(result.At(l).GetFloat(), v4_[l], 1E-2);
 //  }
-  
-  parser.SetExpr("smooth(dc1, 4)");
+
+  parser.SetExpr("smooth(dc1, 0.04)");
   result = parser.Eval();
   for (int l = 0; l < v1_.size(); l++) {
     //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
     EXPECT_NEAR(result.At(l).GetFloat(), v5_[l], 1E-2);
   }
-  
   
 }
