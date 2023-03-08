@@ -9,11 +9,11 @@ MUP_NAMESPACE_START
 void Smooth::Eval(ptr_val_type &ret, const ptr_val_type* a_pArg, int a_iArgc)
 {
   assert(a_iArgc==2);
-  SmoothFunction SmoothFunction(ret, a_pArg, frequency_);
-  *ret = SmoothFunction.GetResult();
+  
+  *ret = SmoothFunction::Smooth(ret, a_pArg, frequency_);
 }
 
-SmoothFunction::SmoothFunction(ptr_val_type &result, const ptr_val_type* a_pArg, int frequency_) {
+matrix_type SmoothFunction::Smooth(ptr_val_type &result, const ptr_val_type* a_pArg, int frequency_) {
   
   const IValue *arg1 = a_pArg[0].Get(),
       *arg2 = a_pArg[1].Get();
@@ -40,7 +40,7 @@ SmoothFunction::SmoothFunction(ptr_val_type &result, const ptr_val_type* a_pArg,
     }
     
     if(size < ((sample_qtd - 1) / 2) || (sample_qtd/2))
-      *result = a1;
+      return a1;
     
     matrix_type rv(size);
     
@@ -48,8 +48,7 @@ SmoothFunction::SmoothFunction(ptr_val_type &result, const ptr_val_type* a_pArg,
       for(int i = 0; i < size; i++) {
         rv.At(i) = a1.At(i);
       }
-      *result = rv;
-      return;
+      return rv;
     }
     
     else if(sample_qtd % 2 != 0) {
@@ -63,8 +62,8 @@ SmoothFunction::SmoothFunction(ptr_val_type &result, const ptr_val_type* a_pArg,
     }
     
     for (int iterator = 0; iterator < size; iterator++) {
-//      if(!a1.At(iterator).IsNonComplexScalar())
-//        throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, GetIdent(), a1.At(iterator).GetType(), 'f', 1));
+      if(!a1.At(iterator).IsNonComplexScalar())
+        throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, "Wrong Type for SmoothFunction" , a1.At(iterator).GetType(), 'f', 1));
       
       int samples_count = 0;
       for (int j = iterator - windows_size; j <= iterator + step_foward; j++ ){
@@ -75,7 +74,10 @@ SmoothFunction::SmoothFunction(ptr_val_type &result, const ptr_val_type* a_pArg,
       }
       rv.At(iterator) = rv.At(iterator).GetFloat() / (float_type) samples_count;
     }
-    *result = rv;
+    return rv;
+  }
+  else{
+    throw ParserError(ErrorContext(ecTYPE_CONFLICT_FUN, -1, "Not a matrix !" , arg1->GetType(), 'm', 1));
   }
 }
 }//Namespace

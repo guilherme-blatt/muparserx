@@ -31,10 +31,8 @@ public:
 
 class SmoothFunction{
 public:
-  const matrix_type *result;
-
-  SmoothFunction(ptr_val_type &ret, const ptr_val_type *a_pArg, int frequency);
-  const matrix_type *GetResult() {return result;};
+  static matrix_type Smooth(ptr_val_type &ret, const ptr_val_type *a_pArg, int frequency);
+  
 };
 #endif //MUPARSERX_MUPARSERX_MOTECSMOOTHFUNCTION_H
 
