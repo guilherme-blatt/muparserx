@@ -32,7 +32,6 @@ public:
 class SmoothFunction{
 public:
   static matrix_type Smooth(ptr_val_type &ret, const ptr_val_type *a_pArg, int frequency);
-  
 };
 #endif //MUPARSERX_MUPARSERX_MOTECSMOOTHFUNCTION_H
 
