@@ -39,7 +39,7 @@ matrix_type SmoothFunction::Smooth(ptr_val_type &result, const ptr_val_type* a_p
       sample_qtd = a2;
     }
     
-    if(size < ((sample_qtd - 1) / 2) || (sample_qtd/2))
+    if(size < ((sample_qtd - 1) / 2) || size < (sample_qtd/2))
       return a1;
     
     matrix_type rv(size);

@@ -4,7 +4,7 @@
 #include <vector>
 #include <motec/MotecDefinition.h>
 
-class SmoothPackageFixture : public ::testing::Test {
+class DerivativePackageFixture : public ::testing::Test {
 
 protected:
   virtual void TearDown()
@@ -26,10 +26,10 @@ protected:
     v1_ = {1,1,1,0,0,1};
     v2_ = {1, 1, 0.66, 0.33, 0.33, 0.5};
     v3_ = {1, 0.75, 0.6, 0.6, 0.5, 0.33};
-    v4_ = {0.75, 0.6, 0.66, 0.66, 0.6, 0.5};
+//    v4_ = {0.75, 0.6, 0.66, 0.66, 0.6, 0.5};
 //    v5_ = {0.6, 0.66, 0.66, 0.66, 0.66, 0.6};
 //    v5_ = {1, 1, 0.75, 0.5, 0.25, 0};
-    v5_ = {170.69, 170.30, 171.14, 171.98, 171.02, 170.06, 169.10, 168.14, 167.95, 167.77, 167.77, 167.77, 167.49, 167.21,
+    v4_ = {170.69, 170.30, 171.14, 171.98, 171.02, 170.06, 169.10, 168.14, 167.95, 167.77, 167.77, 167.77, 167.49, 167.21,
            164.07, 160.94, 156.23, 151.53, 154.80, 158.07, 158.26, 158.45, 157.96, 157.46, 155.76, 154.07, 153.51, 152.94,
            154.53, 156.12, 156.20, 156.28, 155.37, 154.46, 152.79, 151.12, 149.71, 148.30, 148.65, 149.00, 145.24, 141.49,
            144.11, 146.72, 147.11, 147.50, 148.09, 148.68, 147.85, 147.03, 144.91};
@@ -70,11 +70,11 @@ protected:
   mup::Value result;
   
   
-  SmoothPackageFixture() :parser(mup::pck_ELEMENT_WISE) { }
+  DerivativePackageFixture() :parser(mup::pck_ELEMENT_WISE) { }
 };
 
 
-TEST_F(SmoothPackageFixture, MuparserxImportedCorrectly)
+TEST_F(DerivativePackageFixture, MuparserxImportedCorrectly)
 {
   //Simple library example to make sure it is imported correctly
   mup::ParserX parserX(mup::pckALL_NON_COMPLEX);
@@ -83,10 +83,10 @@ TEST_F(SmoothPackageFixture, MuparserxImportedCorrectly)
   EXPECT_EQ(result.GetInteger(), 3);
 }
 
-TEST_F(SmoothPackageFixture, SmoothFunction)
+TEST_F(DerivativePackageFixture, DerivativeFunction)
 {
 
-  parser.SetExpr("smooth(dc1, 1)");
+  parser.SetExpr("derivative(dc4, 0.02)");
   result = parser.Eval();
   for (int l = 0; l < v1_.size(); l++) {
     //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;

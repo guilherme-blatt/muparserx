@@ -18,6 +18,7 @@ void motecDefinition::add_motec_functions(mup::ParserX* parser, int frequency)
   parser->DefineFun(new MotecSgn());
   parser->DefineFun(new Choose());
   parser->DefineFun(new Smooth(frequency));
+  parser->DefineFun(new Derivative(frequency));
   
 }
 

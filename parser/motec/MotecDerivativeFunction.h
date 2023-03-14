@@ -2,8 +2,8 @@
 // Created by Optimum G on 1/27/2023.
 //
 
-#ifndef MUPARSERX_MOTECSMOOTHFUNCTION_H
-#define MUPARSERX_MUPARSERX_MOTECSMOOTHFUNCTION_H
+#ifndef MUPARSERX_MOTECDERIVATIVEFUNCTION_H
+#define MUPARSERX_MUPARSERX_MOTECDERIVATIVEFUNCTION_H
 
 #include "../mpICallback.h"
 #include "../mpParser.h"
@@ -29,10 +29,6 @@ public:
   }
 }; // class Derivative
 
-class DerivativeFunction{
-public:
-  static matrix_type Derivative(ptr_val_type &ret, const ptr_val_type *a_pArg, int frequency);
-};
-#endif //MUPARSERX_MUPARSERX_MOTECSMOOTHFUNCTION_H
+#endif //MUPARSERX_MUPARSERX_MOTECDERIVATIVEFUNCTION_H
 
 }//namespace end
