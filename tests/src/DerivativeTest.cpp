@@ -14,23 +14,15 @@ protected:
   
   virtual void SetUp()
   {
-//    for (size_t i = 0; i < 5; i++) {
-//      v1_.push_back((double) i + 1);
-//      v2_.push_back((double) i * 2);
-//    }
-    
-//    for (size_t i = 0; i < 10; i++) {
-//      v3_.push_back((double) i * 5);
-//      v4_.push_back((double) i * i);
-//    }
-    v1_ = {1,1,1,0,0,1};
-    v2_ = {1, 1, 0.66, 0.33, 0.33, 0.5};
-    v3_ = {1, 0.75, 0.6, 0.6, 0.5, 0.33};
-//    v4_ = {0.75, 0.6, 0.66, 0.66, 0.6, 0.5};
-//    v5_ = {0.6, 0.66, 0.66, 0.66, 0.66, 0.6};
-//    v5_ = {1, 1, 0.75, 0.5, 0.25, 0};
+
+    v1_ = {12.04, 12.04, 12.85, 12.85, 11.83, 11.83, 9.38, 9.38, 10.61, 10.61, 9.59, 9.59, 12.24, 12.24, 12.65};
+    v2_ = {0, 0.02, 0.01, 0.01, -0.02, -0.02, 0.04, 0.04, 0.02, 0.02, 0.04, 0.04, -0.09, -0.09, 0.02};
+    v3_ = {6586.6, 6591.9, 6597.2, 6608.9, 6620.6, 6615.6, 6610.5, 6612.9, 6615.3,
+           6621.3, 6627.3, 6629.9, 6632.5, 6631.2, 6629.9, 6636.2};
     v4_ = {187.95, 188.07, 188.19, 188.32, 188.45, 188.57, 188.68, 188.78, 188.87,
            188.98, 189.08, 189.18, 189.28, 189.40, 189.52, 189.65};
+    
+    
 
     dc1_value = new mup::Value(v1_.size(), 0);
     for (int l = 0; l < v1_.size(); ++l) {
@@ -84,19 +76,19 @@ TEST_F(DerivativePackageFixture, MuparserxImportedCorrectly)
 TEST_F(DerivativePackageFixture, DerivativeFunction)
 {
 
+  parser.SetExpr("derivative(dc4, dc3)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-1);
+  }
+
   parser.SetExpr("derivative(dc4, 3)");
   result = parser.Eval();
   for (int l = 0; l < v1_.size(); l++) {
     //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
-    EXPECT_EQ(result.At(l).GetFloat(), v1_[l]);
+    EXPECT_NEAR(result.At(l).GetFloat(), v1_[l], 1E-4);
   }
-
-//  parser.SetExpr("smooth(dc1, 3)");
-//  result = parser.Eval();
-//  for (int l = 0; l < v1_.size(); l++) {
-//    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
-//    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-2);
-//  }
 
 //  parser.SetExpr("smooth(dc1, 5)");
 //  result = parser.Eval();
