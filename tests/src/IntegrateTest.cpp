@@ -1,0 +1,88 @@
+#include <gtest/gtest.h>
+#include <mpParser.h>
+#include <mpValReader.h>
+#include <vector>
+#include <motec/MotecDefinition.h>
+
+class IntegratePackageFixture : public ::testing::Test {
+
+protected:
+  virtual void TearDown()
+  {
+  
+  }
+  
+  virtual void SetUp()
+  {
+
+    v1_ = {187.95, 188.07, 188.19, 188.32, 188.45, 188.57, 188.68, 188.78, 188.87,
+           188.98, 189.08, 189.18, 189.28, 189.40, 189.52, 189.65};
+    v2_ = {0, 1.88, 3.76, 5.64, 7.52, 9.41, 11.29, 13.18, 15.07, 16.95, 18.84, 20.73, 22.62, 24.52, 26.41, 28.31};
+    v3_ = {6586.6, 6591.9, 6597.2, 6608.9, 6620.6, 6615.6, 6610.5, 6612.9, 6615.3,
+           6621.3, 6627.3, 6629.9, 6632.5, 6631.2, 6629.9, 6636.2};
+    v4_ = {187.95, 188.07, 188.19, 188.32, 188.45, 188.57, 188.68, 188.78, 188.87,
+           188.98, 189.08, 189.18, 189.28, 189.40, 189.52, 189.65};
+    
+    
+
+    dc1_value = new mup::Value(v1_.size(), 0);
+    for (int l = 0; l < v1_.size(); ++l) {
+      dc1_value->At(l) = v1_[l];
+    }
+  
+    dc2_value = new mup::Value(v2_.size(), 0);
+    for (int l = 0; l < v2_.size(); ++l) {
+      dc2_value->At(l) = v2_[l];
+    }
+  
+    dc3_value = new mup::Value(v3_.size(), 0);
+    for (int l = 0; l < v3_.size(); ++l) {
+      dc3_value->At(l) = v3_[l];
+    }
+  
+    dc4_value = new mup::Value(v4_.size(), 0);
+    for (int l = 0; l < v4_.size(); ++l) {
+      dc4_value->At(l) = v4_[l];
+    }
+    
+    parser.DefineVar("dc1", mup::Variable(dc1_value));
+    parser.DefineVar("dc2", mup::Variable(dc2_value));
+    parser.DefineVar("dc3", mup::Variable(dc3_value));
+    parser.DefineVar("dc4", mup::Variable(dc4_value));
+  
+    mup::motecDefinition::add_motec_functions(&parser, 100);
+  }
+  
+  std::vector<double> v1_, v2_, v3_, v4_, v5_;
+  
+  mup::ParserX parser;
+  
+  mup::Value *dc1_value, *dc2_value, *dc3_value, *dc4_value;
+  mup::Value result;
+  
+  
+  IntegratePackageFixture() :parser(mup::pck_ELEMENT_WISE) { }
+};
+
+
+TEST_F(IntegratePackageFixture, MuparserxImportedCorrectly)
+{
+  //Simple library example to make sure it is imported correctly
+  mup::ParserX parserX(mup::pckALL_NON_COMPLEX);
+  parserX.SetExpr("1 + 2");
+  mup::Value result = parserX.Eval();
+  EXPECT_EQ(result.GetInteger(), 3);
+}
+
+TEST_F(IntegratePackageFixture, IntegrateFunction)
+{
+
+  parser.SetExpr("integrate(dc1)");
+  result = parser.Eval();
+  for (int l = 0; l < v1_.size(); l++) {
+    //std::cout << "Resultado: " << result.At(l).GetFloat() << std::endl;
+    EXPECT_NEAR(result.At(l).GetFloat(), v2_[l], 1E-1);
+  }
+  
+  
+}
