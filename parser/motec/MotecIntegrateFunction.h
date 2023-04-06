@@ -14,7 +14,7 @@ class Integrate : public ICallback
 {
   int frequency_;
 public:
-  Integrate (int frequency) :ICallback(cmFUNC, _T("integrate") ) {frequency_ = frequency;};
+  Integrate (int frequency) :ICallback(cmFUNC, _T("integrate"), -1 ) {frequency_ = frequency;};
   
   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
   
