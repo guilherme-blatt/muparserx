@@ -12,6 +12,7 @@
 #include "MotecSmoothFunction.h"
 #include "MotecDerivativeFunction.h"
 #include "MotecIntegrateFunction.h"
+#include "MotecIntegrateDistFunction.h"
 
 MUP_NAMESPACE_START
 
