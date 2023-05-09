@@ -21,6 +21,7 @@ void motecDefinition::add_motec_functions(mup::ParserX* parser, int frequency)
   parser->DefineFun(new Derivative(frequency));
   parser->DefineFun(new Integrate(frequency));
   parser->DefineFun(new IntegrateDist(frequency));
+  parser->DefineFun(new StatMean());
   
   
 }

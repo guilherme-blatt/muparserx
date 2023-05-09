@@ -13,6 +13,7 @@
 #include "MotecDerivativeFunction.h"
 #include "MotecIntegrateFunction.h"
 #include "MotecIntegrateDistFunction.h"
+#include "MotecStatMeanFunction.h"
 
 MUP_NAMESPACE_START
 

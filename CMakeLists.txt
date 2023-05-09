@@ -111,7 +111,7 @@ install(
 
 option(BUILD_EXAMPLES "enable building example applications" ON)
 if(BUILD_EXAMPLES)
-    add_executable(example sample/example.cpp sample/timer.cpp parser/motec/MotecChooseFunction.cpp parser/motec/MotecChooseFunction.h parser/motec/MotecSmoothFunction.cpp parser/motec/MotecSmoothFunction.h parser/motec/MotecDerivativeFunction.cpp parser/motec/MotecDerivativeFunction.h parser/motec/MotecIntegrateFunction.h parser/motec/MotecIntegrateFunction.cpp parser/motec/MotecIntegrateDistFunction.cpp parser/motec/MotecIntegrateDistFunction.h)
+    add_executable(example sample/example.cpp sample/timer.cpp parser/motec/MotecChooseFunction.cpp parser/motec/MotecChooseFunction.h parser/motec/MotecSmoothFunction.cpp parser/motec/MotecSmoothFunction.h parser/motec/MotecDerivativeFunction.cpp parser/motec/MotecDerivativeFunction.h parser/motec/MotecIntegrateFunction.h parser/motec/MotecIntegrateFunction.cpp parser/motec/MotecIntegrateDistFunction.cpp parser/motec/MotecIntegrateDistFunction.h parser/motec/MotecStatMeanFunction.cpp parser/motec/MotecStatMeanFunction.h parser/motec/MotecStatMaxFunction.h parser/motec/MotecStatMaxFunction.h parser/motec/MotecStatMinFunction.cpp parser/motec/MotecStatMinFunction.h)
     target_link_libraries(example muparserx)
 endif(BUILD_EXAMPLES)
 
